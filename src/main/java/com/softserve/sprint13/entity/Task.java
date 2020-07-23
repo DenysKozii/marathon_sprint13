@@ -22,6 +22,11 @@ public class Task {
     @Column(name = "title")
     private String title;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "sprint_id")
+    private Sprint sprint;
+
     public BigInteger getId() {
         return id;
     }

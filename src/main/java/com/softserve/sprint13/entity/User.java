@@ -2,6 +2,7 @@ package com.softserve.sprint13.entity;
 
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +27,20 @@ public class User {
 
     @Column(name = "role")
     private String role;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "marathon_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "marathon_id"))
+    private List<Marathon> marathons;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Progress> progressList;
 
     public BigInteger getId() {
         return id;
