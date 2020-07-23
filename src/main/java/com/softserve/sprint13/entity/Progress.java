@@ -22,6 +22,14 @@ public class Progress {
     @Column(name = "status")
     private String status;
 
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "task_id")
+    private Task task;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public BigInteger getId() {
         return id;

@@ -3,6 +3,7 @@ package com.softserve.sprint13.entity;
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "sprint")
@@ -21,6 +22,11 @@ public class Sprint {
 
     @Column(name = "title")
     private String title;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "sprint",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Task> tasks;
 
     public BigInteger getId() {
         return id;
