@@ -1,9 +1,13 @@
 package com.softserve.sprint13.entity;
 
+import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
-import java.math.BigInteger;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "marathon")
 public class Marathon {
@@ -11,8 +15,9 @@ public class Marathon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private BigInteger id;
+    private Long id;
 
+    @NotBlank(message = "Marathon title cannot be empty")
     @Column(name = "title")
     private String title;
 
@@ -23,33 +28,11 @@ public class Marathon {
             name = "marathon_user",
             joinColumns = @JoinColumn(name = "marathon_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ToString.Exclude
     private List<User> users;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "marathon_id")
+    @ToString.Exclude
     private List<Sprint> sprints;
-
-    public BigInteger getId() {
-        return id;
-    }
-
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return "Marathon{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
-    }
 }
