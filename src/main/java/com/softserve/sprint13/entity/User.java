@@ -62,7 +62,7 @@ public class User {
     private List<Marathon> marathons;
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "user",
+            mappedBy = "trainee",
             cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Progress> progressList;
