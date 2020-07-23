@@ -1,10 +1,14 @@
 package com.softserve.sprint13.entity;
 
+import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
-import java.math.BigInteger;
+import javax.validation.constraints.NotBlank;
 import java.sql.Date;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "sprint")
 public class Sprint {
@@ -12,61 +16,23 @@ public class Sprint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private BigInteger id;
+    private Long id;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "start_date")
     private Date startDate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "finish_date")
     private Date finishDate;
 
+    @NotBlank(message = "Sprint title cannot be empty")
     @Column(name = "title")
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "sprint",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+            cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Task> tasks;
-
-    public BigInteger getId() {
-        return id;
-    }
-
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return "Sprint{" +
-                "id=" + id +
-                ", startDate=" + startDate +
-                ", finishDate=" + finishDate +
-                ", title='" + title + '\'' +
-                '}';
-    }
 }

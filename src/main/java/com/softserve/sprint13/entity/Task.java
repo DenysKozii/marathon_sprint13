@@ -1,9 +1,16 @@
 package com.softserve.sprint13.entity;
 
-import javax.persistence.*;
-import java.math.BigInteger;
-import java.sql.Date;
+import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
+import java.util.List;
+
+@Data
 @Entity
 @Table(name = "task")
 public class Task {
@@ -11,61 +18,31 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private BigInteger id;
+    private Long id;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
 
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date")
     private Date updateDate;
 
+    @NotBlank(message = "Task title cannot be empty")
     @Column(name = "title")
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "sprint_id")
+    @ToString.Exclude
     private Sprint sprint;
 
-    public BigInteger getId() {
-        return id;
-    }
-
-    public void setId(BigInteger id) {
-        this.id = id;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", title='" + title + '\'' +
-                '}';
-    }
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "task",
+            cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Progress> progressList;
 }
