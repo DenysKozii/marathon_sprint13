@@ -2,6 +2,7 @@ package com.softserve.sprint13.entity;
 
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
