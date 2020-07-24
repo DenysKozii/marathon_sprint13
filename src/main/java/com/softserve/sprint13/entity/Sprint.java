@@ -1,5 +1,6 @@
 package com.softserve.sprint13.entity;
 
+import com.softserve.sprint13.validation.StartBeforeEndDateValidation;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "sprint")
+@StartBeforeEndDateValidation(message = "Start date should be before finish date.")
 public class Sprint {
 
     @Id
@@ -27,7 +29,7 @@ public class Sprint {
     private Date finishDate;
 
     @NotBlank(message = "Sprint title cannot be empty")
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY,
