@@ -18,7 +18,7 @@ public class Marathon {
     private Long id;
 
     @NotBlank(message = "Marathon title cannot be empty")
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     private String title;
 
     @ManyToMany(fetch = FetchType.LAZY,
