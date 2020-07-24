@@ -3,6 +3,8 @@ package com.softserve.sprint13.service;
 import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.TaskRepository;
+import com.softserve.sprint13.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,6 +19,9 @@ public class ProgressServiceImpl implements ProgressService {
     ProgressRepository progressRepository;
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Progress getProgressById(Long id) {
@@ -78,5 +83,13 @@ public class ProgressServiceImpl implements ProgressService {
 //        marathonEntity.getSprints().add(sprintEntity);
 //        return marathonRepository.save(marathonEntity)!=null;
         return null;
+    }
+
+    @Override
+    public boolean addProgressToUser(Progress progress, User user) {
+        com.softserve.sprint13.entity.User userEntity = userRepository.getOne(user.getId());
+        Progress progressEntity = progressRepository.getOne(progress.getId());
+        userEntity.getProgressList().add(progressEntity);
+        return userRepository.save(userEntity) != null;
     }
 }
