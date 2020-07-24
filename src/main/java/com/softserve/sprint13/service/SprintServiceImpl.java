@@ -20,13 +20,18 @@ public class SprintServiceImpl implements SprintService{
     MarathonRepository marathonRepository;
     @Override
     public List<Sprint> getSprintByMarathonId(Long id) {
-        Marathon marathonById = marathonRepository.getOne(id);
-        return marathonById.getSprints();
+        Optional<Marathon> marathon = marathonRepository.findById(id);
+        if (marathon.isPresent())
+            return marathon.get().getSprints();
+        else throw new EntityNotFoundException("No marathon for given id");
     }
 
     @Override
     public boolean addSprintToMarathon(Sprint sprint, Marathon marathon) {
-        return marathon.getSprints().add(sprint);
+        Sprint sprintEntity = sprintRepository.getOne(sprint.getId());
+        Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
+        marathonEntity.getSprints().add(sprintEntity);
+        return marathonRepository.save(marathonEntity)!=null;
     }
 
 
