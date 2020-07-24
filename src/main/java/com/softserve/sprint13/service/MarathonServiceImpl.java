@@ -1,6 +1,7 @@
 package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Marathon;
+import com.softserve.sprint13.entity.Sprint;
 import com.softserve.sprint13.repository.MarathonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,9 @@ public class MarathonServiceImpl implements MarathonService {
 
     @Override
     public void deleteMarathonById(Long id) {
-        marathonRepository.deleteById(id);
+        Optional<Marathon> marathon = marathonRepository.findById(id);
+        if (marathon.isPresent())
+            marathonRepository.deleteById(id);
+        else throw new EntityNotFoundException("No marathon for given id");
     }
 }
