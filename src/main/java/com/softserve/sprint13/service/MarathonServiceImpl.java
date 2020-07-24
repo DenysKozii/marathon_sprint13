@@ -40,6 +40,7 @@ public class MarathonServiceImpl implements MarathonService {
             if (marathonToUpdate.isPresent()) {
                 Marathon newMarathon = marathonToUpdate.get();
                 newMarathon.setTitle(marathon.getTitle());
+                newMarathon = marathonRepository.save(marathon);
                 return newMarathon;
             }
         }

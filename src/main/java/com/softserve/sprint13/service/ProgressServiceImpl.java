@@ -1,20 +1,24 @@
 package com.softserve.sprint13.service;
 
-import com.softserve.sprint13.entity.Progress;
-import com.softserve.sprint13.entity.Task;
+import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.repository.ProgressRepository;
+import com.softserve.sprint13.repository.TaskRepository;
 import com.softserve.sprint13.repository.UserRepository;
-import com.softserve.sprint13.entity.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.softserve.sprint13.entity.User.Role.TRAINEE;
+
 public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
     ProgressRepository progressRepository;
+    @Autowired
+    TaskRepository taskRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -29,6 +33,12 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public Progress addTaskForStudent(Task task, User user) {
+//        if (user.getRole() == TRAINEE){
+//            Task taskEntity = taskRepository.getOne(task.getId());
+//            User userEntity = .getOne(marathon.getId());
+//            marathonEntity.getSprints().add(sprintEntity);
+//            return marathonRepository.save(marathonEntity)!=null;
+//        }
         return null;
     }
 
@@ -43,6 +53,7 @@ public class ProgressServiceImpl implements ProgressService {
                 newProgress.setTask(progress.getTask());
                 newProgress.setTrainee(progress.getTrainee());
                 newProgress.setUpdateDate(progress.getUpdateDate());
+                newProgress = progressRepository.save(progress);
                 return newProgress;
             }
         }
@@ -67,6 +78,10 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<Progress> allProgressByUserIdAndSprintId(Long userId, Long sprintId) {
+//        Sprint sprintEntity = sprintRepository.getOne(sprint.getId());
+//        Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
+//        marathonEntity.getSprints().add(sprintEntity);
+//        return marathonRepository.save(marathonEntity)!=null;
         return null;
     }
 
