@@ -2,8 +2,8 @@ package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.entity.Progress;
-import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.repository.MarathonRepository;
 import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     ProgressRepository progressRepository;
+
+    @Autowired
+    MarathonRepository marathonRepository;
 
     @Override
     public List<User> getAll() {
@@ -47,11 +50,22 @@ public class UserServiceImpl implements UserService {
                 newUser.setLastName(user.getLastName());
                 newUser.setPassword(user.getPassword());
                 newUser.setRole(user.getRole());
+                newUser = userRepository.save(newUser);
                 return newUser;
             }
         }
         user = userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public User deleteUser(User user) {
+        Long id = user.getId();
+        if(id != null) {
+            userRepository.deleteById(id);
+            return user;
+        }
+        return null;
     }
 
     @Override
@@ -65,14 +79,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUserToMarathon(User user, Marathon marathon) {
-        return marathon.getUsers().add(user);
+        User userEntity = userRepository.getOne(user.getId());
+        Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
+        marathonEntity.getUsers().add(userEntity);
+        return marathonRepository.save(marathonEntity)!=null;
     }
 
     @Override
-    public boolean addUserToTask(User user, Task task) {
-        Progress progress = new Progress();
-        progress.setTrainee(user);
-        progress.setStatus(Progress.TaskStatus.PENDING);
-        return task.getProgressList().add(progress);
+    public boolean addUserToProgress(User user, Progress progress) {
+        User userEntity = userRepository.getOne(user.getId());
+        Progress progressEntity = progressRepository.getOne(progress.getId());
+        progressEntity.setTrainee(userEntity);
+        return progressRepository.save(progressEntity)!= null;
     }
 }
