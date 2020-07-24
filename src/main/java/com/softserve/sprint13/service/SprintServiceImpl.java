@@ -36,17 +36,20 @@ public class SprintServiceImpl implements SprintService{
 
 
     @Override
-    public boolean updateSprint(Sprint sprint) {
-        Optional<Sprint> sprintToUpdate = sprintRepository.findById(sprint.getId());
-        if(sprintToUpdate.isPresent()){
-            Sprint newSprint = sprintToUpdate.get();
-            newSprint.setFinishDate(sprint.getFinishDate());
-            newSprint.setStartDate(sprint.getStartDate());
-            newSprint.setTitle(sprint.getTitle());
-            newSprint.setTasks(sprint.getTasks());
-            return true;
+    public Sprint createOrUpdateSprint(Sprint sprint) {
+        if (sprint.getId() != null) {
+            Optional<Sprint> sprintToUpdate = sprintRepository.findById(sprint.getId());
+            if (sprintToUpdate.isPresent()) {
+                Sprint newSprint = sprintToUpdate.get();
+                newSprint.setFinishDate(sprint.getFinishDate());
+                newSprint.setStartDate(sprint.getStartDate());
+                newSprint.setTitle(sprint.getTitle());
+                newSprint.setTasks(sprint.getTasks());
+                return newSprint;
+            }
         }
-        return false;
+        sprint = sprintRepository.save(sprint);
+        return sprint;
     }
 
     @Override

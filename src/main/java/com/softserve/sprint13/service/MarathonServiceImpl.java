@@ -21,9 +21,7 @@ public class MarathonServiceImpl implements MarathonService {
     @Override
     public List<Marathon> getAll() {
         List<Marathon> marathons = marathonRepository.findAll();
-        if (!marathons.isEmpty())
-            return marathons;
-        return new ArrayList<>();
+        return marathons.isEmpty() ? new ArrayList<>() : marathons;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class MarathonServiceImpl implements MarathonService {
 
 
     @Override
-    public Marathon createOrUpdate(Marathon marathon) {
+    public Marathon createOrUpdateMarathon(Marathon marathon) {
         if (marathon.getId() != null) {
             Optional<Marathon> marathonToUpdate = marathonRepository.findById(marathon.getId());
             if (marathonToUpdate.isPresent()) {

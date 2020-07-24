@@ -7,6 +7,6 @@ import java.util.List;
 public interface MarathonService {
     public List<Marathon> getAll();
     public Marathon getMarathonById(Long id);
-    public Marathon createOrUpdate(Marathon marathon);
+    public Marathon createOrUpdateMarathon(Marathon marathon);
     public void deleteMarathonById(Long id);
 }

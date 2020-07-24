@@ -32,12 +32,29 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public Progress addOrUpdateProgress(Progress progress) {
-
-        return null;
+        if (progress.getId() != null) {
+            Optional<Progress> progressToUpdate = progressRepository.findById(progress.getId());
+            if (progressToUpdate.isPresent()) {
+                Progress newProgress = progressToUpdate.get();
+                newProgress.setStatus(progress.getStatus());
+                newProgress.setStartDate(progress.getStartDate());
+                newProgress.setTask(progress.getTask());
+                newProgress.setTrainee(progress.getTrainee());
+                newProgress.setUpdateDate(progress.getUpdateDate());
+                return newProgress;
+            }
+        }
+        progress = progressRepository.save(progress);
+        return progress;
     }
 
     @Override
     public boolean setStatus(Progress.TaskStatus taskStatus, Progress progress) {
+        Optional<Progress> progressEntity = progressRepository.findById(progress.getId());
+        if(progressEntity.isPresent()){
+            progress.setStatus(taskStatus);
+            return true;
+        }
         return false;
     }
 
