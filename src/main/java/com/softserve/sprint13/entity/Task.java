@@ -42,7 +42,15 @@ public class Task {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "task",
-            cascade = CascadeType.ALL)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
     @ToString.Exclude
     private List<Progress> progressList;
+
+    @PreRemove
+    public void checkProgressAssociationBeforeRemoval() {
+        if (!this.progressList.isEmpty()) {
+            throw new RuntimeException("Can't remove a task that has progress entities.");
+        }
+    }
 }
