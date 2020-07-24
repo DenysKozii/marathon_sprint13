@@ -31,7 +31,7 @@ public class Task {
     private Date updateDate;
 
     @NotBlank(message = "Task title cannot be empty")
-    @Column(name = "title")
+    @Column(name = "title", unique = true)
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,

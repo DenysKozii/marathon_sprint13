@@ -1,9 +1,10 @@
 package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Marathon;
+import com.softserve.sprint13.entity.Progress;
 import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
-import com.softserve.sprint13.repository.MarathonRepository;
+import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Autowired
-    MarathonRepository marathonRepository;
+    ProgressRepository progressRepository;
 
     @Override
     public List<User> getAll() {
@@ -69,6 +70,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUserToTask(User user, Task task) {
-        return task.getProgressList().add();
+        Progress progress = new Progress();
+        progress.setTrainee(user);
+        progress.setStatus(Progress.TaskStatus.PENDING);
+        return task.getProgressList().add(progress);
     }
 }
