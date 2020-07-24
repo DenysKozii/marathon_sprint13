@@ -45,6 +45,10 @@ public class Marathon {
         this.title = title;
     }
 
+    public List<Sprint> getSprints() {
+        return sprints;
+    }
+
     @Override
     public String toString() {
         return "Marathon{" +
