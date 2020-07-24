@@ -32,7 +32,15 @@ public class Sprint {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "sprint",
-            cascade = CascadeType.ALL)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                    CascadeType.DETACH, CascadeType.REFRESH})
     @ToString.Exclude
     private List<Task> tasks;
+
+    @PreRemove
+    public void checkTaskAssociationBeforeRemoval() {
+        if (!this.tasks.isEmpty()) {
+            throw new RuntimeException("Can't remove a sprint that has tasks.");
+        }
+    }
 }
