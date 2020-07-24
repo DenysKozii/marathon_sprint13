@@ -5,10 +5,14 @@ import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
+@Service
+@Transactional
 public class TaskServiceImpl implements TaskService {
 
     @Autowired
@@ -25,5 +29,10 @@ public class TaskServiceImpl implements TaskService {
         if (task.isPresent())
             return task.get();
         else throw new EntityNotFoundException("No task for given id");
+    }
+
+    @Override
+    public Task deleteTask(Task task) {
+        return null;
     }
 }

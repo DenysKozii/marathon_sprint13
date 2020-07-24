@@ -1,22 +1,33 @@
 package com.softserve.sprint13.service;
 
-import com.softserve.sprint13.entity.*;
+import com.softserve.sprint13.entity.Progress;
+import com.softserve.sprint13.entity.Sprint;
+import com.softserve.sprint13.entity.Task;
+import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.repository.ProgressRepository;
+import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
+import com.softserve.sprint13.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.softserve.sprint13.entity.User.Role.TRAINEE;
-
+@Service
+@Transactional
 public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
     ProgressRepository progressRepository;
     @Autowired
     TaskRepository taskRepository;
+    @Autowired
+    SprintRepository sprintRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Progress getProgressById(Long id) {
@@ -77,6 +88,16 @@ public class ProgressServiceImpl implements ProgressService {
 //        Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
 //        marathonEntity.getSprints().add(sprintEntity);
 //        return marathonRepository.save(marathonEntity)!=null;
+        User user = userRepository.getOne(userId);
+        Sprint sprint = sprintRepository.getOne(sprintId);
         return null;
+    }
+
+    @Override
+    public boolean addProgressToUser(Progress progress, User user) {
+        com.softserve.sprint13.entity.User userEntity = userRepository.getOne(user.getId());
+        Progress progressEntity = progressRepository.getOne(progress.getId());
+        userEntity.getProgressList().add(progressEntity);
+        return userRepository.save(userEntity) != null;
     }
 }

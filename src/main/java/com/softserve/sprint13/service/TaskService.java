@@ -8,4 +8,6 @@ public interface TaskService {
     public Task addTaskToSprint(Task task, Sprint sprint);
 
     public Task getTaskById(Long id);
+
+    public Task deleteTask(Task task);
 }
