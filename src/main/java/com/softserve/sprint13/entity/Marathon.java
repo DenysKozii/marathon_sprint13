@@ -11,16 +11,17 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "marathon")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Marathon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotBlank(message = "Marathon title cannot be empty")
     @Column(name = "title", unique = true)
+    @EqualsAndHashCode.Include
     private String title;
 
     @ManyToMany(fetch = FetchType.LAZY,

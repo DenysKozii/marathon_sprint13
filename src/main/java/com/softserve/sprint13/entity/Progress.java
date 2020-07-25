@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "progress")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Progress {
 
     public enum TaskStatus {
@@ -22,7 +23,6 @@ public class Progress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotNull
@@ -47,11 +47,13 @@ public class Progress {
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "task_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Include
     private Task task;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "trainee_id")
     @ToString.Exclude
+    @EqualsAndHashCode.Include
     private User trainee;
 }

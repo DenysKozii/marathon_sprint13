@@ -5,9 +5,11 @@ import com.softserve.sprint13.entity.Task;
 
 public interface TaskService {
 
-    public Task addTaskToSprint(Task task, Sprint sprint);
+    public boolean addTaskToSprint(Task task, Sprint sprint);
 
     public Task getTaskById(Long id);
 
     public Task deleteTask(Task task);
+
+    public Task createOrUpdateTask(Task task);
 }

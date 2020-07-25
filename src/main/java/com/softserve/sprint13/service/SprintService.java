@@ -10,4 +10,5 @@ public interface SprintService {
     public boolean addSprintToMarathon(Sprint sprint, Marathon marathon);
     public Sprint createOrUpdateSprint(Sprint sprint);
     public Sprint getSprintById(Long id);
+    public Sprint deleteSprint(Sprint sprint);
 }

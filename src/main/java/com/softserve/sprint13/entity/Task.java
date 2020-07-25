@@ -13,13 +13,13 @@ import java.util.List;
 
 @Data
 @Entity
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "task")
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @CreationTimestamp
@@ -34,11 +34,13 @@ public class Task {
 
     @NotBlank(message = "Task title cannot be empty")
     @Column(name = "title", unique = true)
+    @EqualsAndHashCode.Include
     private String title;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "sprint_id")
+    @EqualsAndHashCode.Include
     @ToString.Exclude
     private Sprint sprint;
 

@@ -13,11 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -41,25 +38,32 @@ public class ProgressServiceImpl implements ProgressService {
     }
 
     @Override
-    public Progress addTaskForStudent(Task task, User user) {
+    public boolean addTaskForStudent(Task task, User user) {
         if (user.getRole() == Role.TRAINEE){
             Task taskEntity = taskRepository.getOne(task.getId());
             User userEntity = userRepository.getOne(user.getId());
+            Progress newProgress = new Progress();
+            newProgress.setTask(taskEntity);
+            newProgress.setTrainee(userEntity);
+            newProgress.setStatus(Progress.TaskStatus.PENDING);
+            progressRepository.save(newProgress);
+            userEntity.getProgressList().add(newProgress);
+            return userRepository.save(userEntity) != null;
         }
-        return null;
+        return false;
     }
 
     @Override
-    public Progress addOrUpdateProgress(Progress progress) {
+    public Progress createOrUpdateProgress(Progress progress) {
         if (progress.getId() != null) {
             Optional<Progress> progressToUpdate = progressRepository.findById(progress.getId());
             if (progressToUpdate.isPresent()) {
                 Progress newProgress = progressToUpdate.get();
                 newProgress.setStatus(progress.getStatus());
-                newProgress.setStartDate(progress.getStartDate());
+//                newProgress.setStartDate(progress.getStartDate());
                 newProgress.setTask(progress.getTask());
                 newProgress.setTrainee(progress.getTrainee());
-                newProgress.setUpdateDate(progress.getUpdateDate());
+//                newProgress.setUpdateDate(progress.getUpdateDate());
                 newProgress = progressRepository.save(progress);
                 return newProgress;
             }
@@ -94,5 +98,15 @@ public class ProgressServiceImpl implements ProgressService {
         Progress progressEntity = progressRepository.getOne(progress.getId());
         userEntity.getProgressList().add(progressEntity);
         return userRepository.save(userEntity) != null;
+    }
+    
+    @Override
+    public Progress deleteProgress(Progress progress) {
+        Long id = progress.getId();
+        if(id != null) {
+            progressRepository.deleteById(id);
+            return progress;
+        }
+        return null;
     }
 }
