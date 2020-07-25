@@ -46,7 +46,7 @@ public class ProgressServiceImpl implements ProgressService {
             newProgress.setTask(taskEntity);
             newProgress.setTrainee(userEntity);
             newProgress.setStatus(Progress.TaskStatus.PENDING);
-            progressRepository.save(newProgress);
+            createOrUpdateProgress(newProgress);
             userEntity.getProgressList().add(newProgress);
             return userRepository.save(userEntity) != null;
         }
@@ -60,10 +60,8 @@ public class ProgressServiceImpl implements ProgressService {
             if (progressToUpdate.isPresent()) {
                 Progress newProgress = progressToUpdate.get();
                 newProgress.setStatus(progress.getStatus());
-//                newProgress.setStartDate(progress.getStartDate());
                 newProgress.setTask(progress.getTask());
                 newProgress.setTrainee(progress.getTrainee());
-//                newProgress.setUpdateDate(progress.getUpdateDate());
                 newProgress = progressRepository.save(progress);
                 return newProgress;
             }
