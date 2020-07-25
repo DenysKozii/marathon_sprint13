@@ -45,7 +45,7 @@ public class SprintServiceImpl implements SprintService{
                 newSprint.setFinishDate(sprint.getFinishDate());
                 newSprint.setStartDate(sprint.getStartDate());
                 newSprint.setTitle(sprint.getTitle());
-                newSprint.setTasks(sprint.getTasks());
+                newSprint.setMarathon(sprint.getMarathon());
                 newSprint = sprintRepository.save(newSprint);
                 return newSprint;
             }
