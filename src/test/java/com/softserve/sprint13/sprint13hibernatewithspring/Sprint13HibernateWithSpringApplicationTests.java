@@ -1,10 +1,8 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
-import com.softserve.sprint13.entity.Marathon;
-import com.softserve.sprint13.entity.Sprint;
-import com.softserve.sprint13.entity.Task;
-import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.service.*;
+import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +11,12 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.softserve.sprint13.entity.Progress.TaskStatus.FAIL;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -178,5 +180,56 @@ class Sprint13HibernateWithSpringApplicationTests {
         expected.add(user3);
 
         Assertions.assertEquals(expected, actual, "checkUpdateUsers()");
+    }
+    @Test
+    @Order(3)
+    public void checkAllProgressByUserIdAndMarathonId() {
+        List<Long> expected = Arrays.asList(1L,3L,5L,7L);
+        List<Long> actual = progressService.allProgressByUserIdAndMarathonId(2L,1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndMarathonId()");
+    }
+    @Test
+    @Order(4)
+    public void checkAllProgressByUserIdAndSprintId() {
+        List<Long> expected = Arrays.asList(1L,3L);
+        List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L,1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
+    }
+    @Test
+    @Order(5)
+    public void checkSetStatus() {
+        progressService.setStatus(FAIL,progressService.getProgressById(1L));
+        Progress.TaskStatus actual = progressService.getProgressById(1L).getStatus();
+        Assertions.assertEquals(FAIL, actual, "checkSetStatus()");
+    }
+    @Test
+    @Order(6)
+    public void checkCreateOrUpdateProgress() {
+        Progress progress = progressService.getProgressById(1L);
+        progress.setTask(taskService.getTaskById(3L));
+        progress.setTrainee(userService.getUserById(1L));
+        Progress actual = progressService.createOrUpdateProgress(progress);
+        actual = progressService.getProgressById(actual.getId());
+        Assertions.assertEquals(progress, actual, "checkSetStatus()");
+    }
+    @Test
+    @Order(7)
+    public void checkCreateOrUpdateMarathon() {
+        Marathon marathon = marathonService.getMarathonById(1L);
+        marathon.setTitle("MarathonNew");
+        Marathon actual = marathonService.createOrUpdateMarathon(marathon);
+        actual = marathonService.getMarathonById(actual.getId());
+        Assertions.assertEquals(marathon, actual, "checkCreateOrUpdateMarathon()");
+    }
+    @Test
+    @Order(8)
+    public void checkCreateOrUpdateSprint() {
+        Sprint sprint = sprintService.getSprintById(1L);
+        sprint.setTitle("newSprint");
+        Sprint actual = sprintService.createOrUpdateSprint(sprint);
+        actual = sprintService.getSprintById(actual.getId());
+        Assertions.assertEquals(sprint, actual, "checkCreateOrUpdateSprint()");
     }
 }
