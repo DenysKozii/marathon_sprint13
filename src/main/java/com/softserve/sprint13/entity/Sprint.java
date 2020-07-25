@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,12 @@ public class Sprint {
     @Column(name = "id")
     private Long id;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date")
     private Date startDate;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "finish_date")
     private Date finishDate;

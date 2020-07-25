@@ -14,11 +14,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class SprintServiceImpl implements SprintService{
+public class SprintServiceImpl implements SprintService {
     @Autowired
     SprintRepository sprintRepository;
     @Autowired
     MarathonRepository marathonRepository;
+
     @Override
     public List<Sprint> getSprintByMarathonId(Long id) {
         Optional<Marathon> marathon = marathonRepository.findById(id);
@@ -31,8 +32,9 @@ public class SprintServiceImpl implements SprintService{
     public boolean addSprintToMarathon(Sprint sprint, Marathon marathon) {
         Sprint sprintEntity = sprintRepository.getOne(sprint.getId());
         Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
+        sprintEntity.setMarathon(marathonEntity);
         marathonEntity.getSprints().add(sprintEntity);
-        return marathonRepository.save(marathonEntity)!=null;
+        return marathonRepository.save(marathonEntity) != null && sprintRepository.save(sprintEntity) != null;
     }
 
 
@@ -65,7 +67,7 @@ public class SprintServiceImpl implements SprintService{
     @Override
     public Sprint deleteSprint(Sprint sprint) {
         Long id = sprint.getId();
-        if(id != null) {
+        if (id != null) {
             sprintRepository.deleteById(id);
             return sprint;
         }

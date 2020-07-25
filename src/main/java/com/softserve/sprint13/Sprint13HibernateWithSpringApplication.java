@@ -43,7 +43,6 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
     }
 
     private void fillDataBase() {
-//        flushDatabase();
         Marathon marathon = new Marathon();
         marathon.setTitle("Marathon1");
         marathonService.createOrUpdateMarathon(marathon);
@@ -71,7 +70,6 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
         for (int i = 0; i < 2; i++) {
             Sprint sprint = new Sprint();
             sprint.setTitle("Sprint" + i);
-            sprint.setMarathon(marathon);
             sprint.setStartDate(Date.valueOf(LocalDate.now()));
             sprint.setFinishDate(Date.valueOf(LocalDate.now().plusMonths(3 + 3 * i)));
             sprintService.createOrUpdateSprint(sprint);
@@ -80,7 +78,6 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
             for (int j = 0; j < 2; j++) {
                 Task task = new Task();
                 task.setTitle("Task" + i + j);
-                task.setSprint(sprint);
                 taskService.createOrUpdateTask(task);
                 taskService.addTaskToSprint(task, sprint);
 

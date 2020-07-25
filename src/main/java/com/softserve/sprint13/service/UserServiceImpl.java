@@ -86,8 +86,7 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRepository.getOne(user.getId());
         Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
         marathonEntity.getUsers().add(userEntity);
-        userEntity.getMarathons().add(marathonEntity);
-        return marathonRepository.save(marathonEntity) != null && userRepository.save(userEntity) != null;
+        return marathonRepository.save(marathonEntity) != null;
     }
 
     @Override

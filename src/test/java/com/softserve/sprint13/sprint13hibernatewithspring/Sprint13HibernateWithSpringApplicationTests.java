@@ -49,11 +49,10 @@ class Sprint13HibernateWithSpringApplicationTests {
     }
 
     private void fillDataBase() {
-        flushDatabase();
         Marathon marathon = new Marathon();
         marathon.setTitle("Marathon1");
         marathonService.createOrUpdateMarathon(marathon);
-        
+
         for (int i = 0; i < 2; i++) {
             User mentor = new User();
             mentor.setEmail("mentoruser" + i + "@dh.com");
@@ -73,35 +72,27 @@ class Sprint13HibernateWithSpringApplicationTests {
             userService.createOrUpdateUser(trainee);
             userService.addUserToMarathon(trainee, marathon);
         }
-        
-        for(int i = 0; i < 2; i++) {
+
+        for (int i = 0; i < 2; i++) {
             Sprint sprint = new Sprint();
             sprint.setTitle("Sprint" + i);
-            sprint.setMarathon(marathon);
             sprint.setStartDate(Date.valueOf(LocalDate.now()));
             sprint.setFinishDate(Date.valueOf(LocalDate.now().plusMonths(3 + 3 * i)));
             sprintService.createOrUpdateSprint(sprint);
             sprintService.addSprintToMarathon(sprint, marathon);
 
-            for(int j = 0; j < 2; j++) {
+            for (int j = 0; j < 2; j++) {
                 Task task = new Task();
                 task.setTitle("Task" + i + j);
-                task.setSprint(sprint);
                 taskService.createOrUpdateTask(task);
                 taskService.addTaskToSprint(task, sprint);
 
                 List<User> trainees = userService.getAllByRole("TRAINEE");
-                for (User trainee:
-                     trainees) {
+                for (User trainee :
+                        trainees) {
                     progressService.addTaskForStudent(task, trainee);
                 }
             }
-        }
-    }
-
-    private void flushDatabase() {
-        for (User user : userService.getAll()) {
-            userService.deleteUser(user);
         }
     }
 
