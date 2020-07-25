@@ -2,6 +2,7 @@ package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Sprint;
 import com.softserve.sprint13.entity.Task;
+import com.softserve.sprint13.exception.IncorrectIdException;
 import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
         Optional<Task> task = taskRepository.findById(id);
         if (task.isPresent())
             return task.get();
-        else throw new EntityNotFoundException("No task for given id");
+        else throw new IncorrectIdException("No task for given id");
     }
 
     @Override
