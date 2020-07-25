@@ -3,11 +3,11 @@ package com.softserve.sprint13.service;
 import com.softserve.sprint13.entity.Progress;
 import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.entity.User.Role;
 import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import com.softserve.sprint13.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.softserve.sprint13.entity.User.Role.TRAINEE;
 
 @Service
 @Transactional
@@ -44,7 +42,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public Progress addTaskForStudent(Task task, User user) {
-        if (user.getRole() == TRAINEE){
+        if (user.getRole() == Role.TRAINEE){
             Task taskEntity = taskRepository.getOne(task.getId());
             User userEntity = userRepository.getOne(user.getId());
         }

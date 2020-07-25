@@ -1,7 +1,7 @@
 package com.softserve.sprint13.entity;
 
-import com.softserve.sprint13.validation.ValidateEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,6 +22,7 @@ public class Progress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotNull
@@ -38,7 +39,6 @@ public class Progress {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ValidateEnum(targetClassType = TaskStatus.class, message = "Please select a task status")
     @Column(name = "status")
     private TaskStatus status;
 

@@ -2,7 +2,6 @@ package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Sprint;
 import com.softserve.sprint13.entity.Task;
-import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

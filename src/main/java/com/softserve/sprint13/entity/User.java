@@ -1,7 +1,7 @@
 package com.softserve.sprint13.entity;
 
-import com.softserve.sprint13.validation.ValidateEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -23,6 +23,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotNull
@@ -41,13 +42,12 @@ public class User {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ValidateEnum(targetClassType = Role.class, message = "Please select a role")
     @Column(name = "role")
     private Role role;
 
     @NotNull
     @Column(name = "password")
-    @Size(min = 6, max = 12, message = "Password must be between 6 and 12 characters")
+    @Size(min = 6, max=20, message = "Password must be between 6 and 12 characters")
     @ToString.Exclude
     private String password;
 
