@@ -1,9 +1,6 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
-import com.softserve.sprint13.entity.Marathon;
-import com.softserve.sprint13.entity.Sprint;
-import com.softserve.sprint13.entity.Task;
-import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.service.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +10,10 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -178,5 +177,21 @@ class Sprint13HibernateWithSpringApplicationTests {
         expected.add(user3);
 
         Assertions.assertEquals(expected, actual, "checkUpdateUsers()");
+    }
+    @Test
+    @Order(3)
+    public void checkAllProgressByUserIdAndMarathonId() {
+        List<Long> expected = Arrays.asList(1L,3L,5L,7L);
+        List<Long> actual = progressService.allProgressByUserIdAndMarathonId(2L,1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndMarathonId()");
+    }
+    @Test
+    @Order(4)
+    public void checkAllProgressByUserIdAndSprintId() {
+        List<Long> expected = Arrays.asList(1L,3L);
+        List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L,1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
     }
 }
