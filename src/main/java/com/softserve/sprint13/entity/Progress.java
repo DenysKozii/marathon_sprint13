@@ -25,13 +25,11 @@ public class Progress {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start_date")
     private Date startDate;
 
-    @NotNull
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date")
@@ -42,7 +40,6 @@ public class Progress {
     @Column(name = "status")
     private TaskStatus status;
 
-    @NotNull
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "task_id")

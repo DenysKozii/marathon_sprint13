@@ -17,7 +17,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     TaskRepository taskRepository;
-    
+
     @Autowired
     SprintRepository sprintRepository;
 
@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
             Optional<Task> taskToUpdate = taskRepository.findById(task.getId());
             if (taskToUpdate.isPresent()) {
                 Task newTask = taskToUpdate.get();
-                newTask.setTitle(task.getTitle()) ;
+                newTask.setTitle(task.getTitle());
                 newTask.setProgressList(task.getProgressList());
                 newTask.setSprint(task.getSprint());
                 newTask = taskRepository.save(newTask);
@@ -38,13 +38,14 @@ public class TaskServiceImpl implements TaskService {
         task = taskRepository.save(task);
         return task;
     }
-    
+
     @Override
     public boolean addTaskToSprint(Task task, Sprint sprint) {
         Task taskEntity = taskRepository.getOne(task.getId());
         Sprint sprintEntity = sprintRepository.getOne(sprint.getId());
         sprintEntity.getTasks().add(taskEntity);
-        return sprintRepository.save(sprintEntity)!=null;
+        taskEntity.setSprint(sprintEntity);
+        return sprintRepository.save(sprintEntity) != null && taskRepository.save(taskEntity) != null;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task deleteTask(Task task) {
         Long id = task.getId();
-        if(id != null) {
+        if (id != null) {
             taskRepository.deleteById(id);
             return task;
         }
