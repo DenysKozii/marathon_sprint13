@@ -2,6 +2,7 @@ package com.softserve.sprint13.sprint13hibernatewithspring;
 
 import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.service.*;
+import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.softserve.sprint13.entity.Progress.TaskStatus.FAIL;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -193,5 +196,40 @@ class Sprint13HibernateWithSpringApplicationTests {
         List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L,1L).stream()
                 .map(Progress::getId).collect(Collectors.toList());
         Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
+    }
+    @Test
+    @Order(5)
+    public void checkSetStatus() {
+        progressService.setStatus(FAIL,progressService.getProgressById(1L));
+        Progress.TaskStatus actual = progressService.getProgressById(1L).getStatus();
+        Assertions.assertEquals(FAIL, actual, "checkSetStatus()");
+    }
+    @Test
+    @Order(6)
+    public void checkCreateOrUpdateProgress() {
+        Progress progress = progressService.getProgressById(1L);
+        progress.setTask(taskService.getTaskById(3L));
+        progress.setTrainee(userService.getUserById(1L));
+        Progress actual = progressService.createOrUpdateProgress(progress);
+        actual = progressService.getProgressById(actual.getId());
+        Assertions.assertEquals(progress, actual, "checkSetStatus()");
+    }
+    @Test
+    @Order(7)
+    public void checkCreateOrUpdateMarathon() {
+        Marathon marathon = marathonService.getMarathonById(1L);
+        marathon.setTitle("MarathonNew");
+        Marathon actual = marathonService.createOrUpdateMarathon(marathon);
+        actual = marathonService.getMarathonById(actual.getId());
+        Assertions.assertEquals(marathon, actual, "checkCreateOrUpdateMarathon()");
+    }
+    @Test
+    @Order(8)
+    public void checkCreateOrUpdateSprint() {
+        Sprint sprint = sprintService.getSprintById(1L);
+        sprint.setTitle("newSprint");
+        Sprint actual = sprintService.createOrUpdateSprint(sprint);
+        actual = sprintService.getSprintById(actual.getId());
+        Assertions.assertEquals(sprint, actual, "checkCreateOrUpdateSprint()");
     }
 }
