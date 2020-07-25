@@ -1,12 +1,14 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
-import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,54 +49,59 @@ class Sprint13HibernateWithSpringApplicationTests {
     }
 
     private void fillDataBase() {
-        fillUserTable();
+        flushDatabase();
+        Marathon marathon = new Marathon();
+        marathon.setTitle("Marathon1");
+        marathonService.createOrUpdateMarathon(marathon);
+        
+        for (int i = 0; i < 2; i++) {
+            User mentor = new User();
+            mentor.setEmail("mentoruser" + i + "@dh.com");
+            mentor.setFirstName("MentorName" + i);
+            mentor.setLastName("MentorSurname" + i);
+            mentor.setPassword("qwertyqwerty" + i);
+            mentor.setRole(User.Role.MENTOR);
+            userService.createOrUpdateUser(mentor);
+            userService.addUserToMarathon(mentor, marathon);
+
+            User trainee = new User();
+            trainee.setEmail("traineeUser" + i + "@dh.com");
+            trainee.setFirstName("TraineeName" + i);
+            trainee.setLastName("TraineeSurname" + i);
+            trainee.setPassword("qwerty^qwerty" + i);
+            trainee.setRole(User.Role.TRAINEE);
+            userService.createOrUpdateUser(trainee);
+            userService.addUserToMarathon(trainee, marathon);
+        }
+        
+        for(int i = 0; i < 2; i++) {
+            Sprint sprint = new Sprint();
+            sprint.setTitle("Sprint" + i);
+            sprint.setMarathon(marathon);
+            sprint.setStartDate(Date.valueOf(LocalDate.now()));
+            sprint.setFinishDate(Date.valueOf(LocalDate.now().plusMonths(3 + 3 * i)));
+            sprintService.createOrUpdateSprint(sprint);
+            sprintService.addSprintToMarathon(sprint, marathon);
+
+            for(int j = 0; j < 2; j++) {
+                Task task = new Task();
+                task.setTitle("Task" + i + j);
+                task.setSprint(sprint);
+                taskService.createOrUpdateTask(task);
+                taskService.addTaskToSprint(task, sprint);
+
+                List<User> trainees = userService.getAllByRole("TRAINEE");
+                for (User trainee:
+                     trainees) {
+                    progressService.addTaskForStudent(task, trainee);
+                }
+            }
+        }
     }
 
-    private void fillUserTable() {
+    private void flushDatabase() {
         for (User user : userService.getAll()) {
             userService.deleteUser(user);
-        }
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setEmail("mentoruser" + i + "@dh.com");
-            user.setFirstName("MentorName" + i);
-            user.setLastName("MentorSurname" + i);
-            user.setPassword("qwertyqwerty" + i);
-            user.setRole(User.Role.MENTOR);
-            userService.createOrUpdateUser(user);
-        }
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setEmail("traineeUser" + i + "@dh.com");
-            user.setFirstName("TraineeName" + i);
-            user.setLastName("TraineeSurname" + i);
-            user.setPassword("qwerty^qwerty" + i);
-            user.setRole(User.Role.TRAINEE);
-            userService.createOrUpdateUser(user);
-        }
-    }
-
-    private void fillTaskTable() {
-        for (User user : userService.getAll()) {
-            userService.deleteUser(user);
-        }
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setEmail("mentoruser" + i + "@dh.com");
-            user.setFirstName("MentorName" + i);
-            user.setLastName("MentorSurname" + i);
-            user.setPassword("qwertyqwerty" + i);
-            user.setRole(User.Role.MENTOR);
-            userService.createOrUpdateUser(user);
-        }
-        for (int i = 0; i < 10; i++) {
-            User user = new User();
-            user.setEmail("traineeUser" + i + "@dh.com");
-            user.setFirstName("TraineeName" + i);
-            user.setLastName("TraineeSurname" + i);
-            user.setPassword("qwerty^qwerty" + i);
-            user.setRole(User.Role.TRAINEE);
-            userService.createOrUpdateUser(user);
         }
     }
 

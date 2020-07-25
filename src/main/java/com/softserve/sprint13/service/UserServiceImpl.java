@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteUser(User user) {
         Long id = user.getId();
-        if(id != null) {
+        if (id != null) {
             userRepository.deleteById(id);
             return user;
         }
@@ -86,7 +86,8 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRepository.getOne(user.getId());
         Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
         marathonEntity.getUsers().add(userEntity);
-        return marathonRepository.save(marathonEntity)!=null;
+        userEntity.getMarathons().add(marathonEntity);
+        return marathonRepository.save(marathonEntity) != null && userRepository.save(userEntity) != null;
     }
 
     @Override
@@ -94,6 +95,6 @@ public class UserServiceImpl implements UserService {
         User userEntity = userRepository.getOne(user.getId());
         Progress progressEntity = progressRepository.getOne(progress.getId());
         progressEntity.setTrainee(userEntity);
-        return progressRepository.save(progressEntity)!= null;
+        return progressRepository.save(progressEntity) != null;
     }
 }
