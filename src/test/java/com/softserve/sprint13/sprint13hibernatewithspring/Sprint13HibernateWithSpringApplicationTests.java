@@ -1,19 +1,33 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
+<<<<<<< HEAD
 import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.service.*;
+=======
+import com.softserve.sprint13.entity.Progress;
+import com.softserve.sprint13.service.ProgressService;
+>>>>>>> 7223f4bcab9a5a83b748ca06af78258c99ffa2a1
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+=======
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
+>>>>>>> 7223f4bcab9a5a83b748ca06af78258c99ffa2a1
 
 @SpringBootTest
 class Sprint13HibernateWithSpringApplicationTests {
 
+<<<<<<< HEAD
     @Autowired
     UserService userService;
     @Autowired
@@ -149,4 +163,13 @@ class Sprint13HibernateWithSpringApplicationTests {
         Assertions.assertEquals(expectedMentors, actualMentors, "checkGetAllMentors()");
         Assertions.assertEquals(expectedTrainees, actualTrainees, "checkGetAllTrainees()");
     }
+=======
+
+    @Test
+    void contextLoads() {
+
+    }
+
+
+>>>>>>> 7223f4bcab9a5a83b748ca06af78258c99ffa2a1
 }
