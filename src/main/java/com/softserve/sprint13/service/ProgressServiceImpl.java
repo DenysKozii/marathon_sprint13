@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -79,7 +82,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<Progress> allProgressByUserIdAndMarathonId(Long userId, Long marathonId) {
-        return null;
+        return progressRepository.allProgressByUserIdAndMarathonId(userId,marathonId);
     }
 
     @Override
@@ -88,9 +91,13 @@ public class ProgressServiceImpl implements ProgressService {
 //        Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
 //        marathonEntity.getSprints().add(sprintEntity);
 //        return marathonRepository.save(marathonEntity)!=null;
-        User user = userRepository.getOne(userId);
-        Sprint sprint = sprintRepository.getOne(sprintId);
-        return null;
+//        User user = userRepository.getOne(userId);
+//        Sprint sprint = sprintRepository.getOne(sprintId);
+//        List<Progress> progressesInUser = user.getProgressList();
+//        List<Task> tasksInSprint = sprint.getTasks();
+//        List<Progress> progressesInTasks = Stream.of(tasksInSprint.stream().map(Task::getProgressList)).flatMap(x->x).collect(Collectors.toList());
+//        progressesInUser.stream().filter(o->tasksInSprint.stream().map(Task::getProgressList))
+        return progressRepository.allProgressByUserIdAndSprintId(userId,sprintId);
     }
 
     @Override
