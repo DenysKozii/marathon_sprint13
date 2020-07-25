@@ -4,6 +4,7 @@ import com.softserve.sprint13.entity.Progress;
 import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.entity.User.Role;
+import com.softserve.sprint13.exception.IncorrectIdException;
 import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
@@ -35,7 +36,7 @@ public class ProgressServiceImpl implements ProgressService {
         Optional<Progress> progress = progressRepository.findById(id);
         if (progress.isPresent())
             return progress.get();
-        else throw new EntityNotFoundException("No progress for given id");
+        else throw new IncorrectIdException("No progress for given id");
     }
 
     @Override
