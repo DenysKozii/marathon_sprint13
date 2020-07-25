@@ -1,6 +1,7 @@
 package com.softserve.sprint13.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class Marathon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @NotBlank(message = "Marathon title cannot be empty")

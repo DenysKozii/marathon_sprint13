@@ -2,6 +2,7 @@ package com.softserve.sprint13.entity;
 
 import com.softserve.sprint13.validation.StartBeforeEndDateValidation;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Sprint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Temporal(TemporalType.DATE)

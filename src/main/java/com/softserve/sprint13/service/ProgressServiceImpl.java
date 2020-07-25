@@ -1,18 +1,19 @@
 package com.softserve.sprint13.service;
 
-import com.softserve.sprint13.entity.*;
+import com.softserve.sprint13.entity.Progress;
+import com.softserve.sprint13.entity.Task;
+import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.repository.ProgressRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import com.softserve.sprint13.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.softserve.sprint13.entity.User.Role.TRAINEE;
-
+@Service
 public class ProgressServiceImpl implements ProgressService {
 
     @Autowired
