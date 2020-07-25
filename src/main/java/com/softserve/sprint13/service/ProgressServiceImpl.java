@@ -75,11 +75,9 @@ public class ProgressServiceImpl implements ProgressService {
     @Override
     public boolean setStatus(Progress.TaskStatus taskStatus, Progress progress) {
         Optional<Progress> progressEntity = progressRepository.findById(progress.getId());
-        if(progressEntity.isPresent()){
+        if(progressEntity.isPresent())
             progress.setStatus(taskStatus);
-            return true;
-        }
-        return false;
+        return progressRepository.save(progress)!=null;
     }
 
     @Override
