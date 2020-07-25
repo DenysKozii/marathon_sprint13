@@ -49,6 +49,7 @@ class Sprint13HibernateWithSpringApplicationTests {
     }
 
     private void fillDataBase() {
+        clearTables();
         Marathon marathon = new Marathon();
         marathon.setTitle("Marathon1");
         marathonService.createOrUpdateMarathon(marathon);
@@ -96,11 +97,15 @@ class Sprint13HibernateWithSpringApplicationTests {
         }
     }
 
+    private void clearTables() {
+
+    }
+
     @Test
     public void checkUpdateUsers() {
-        User mentor4 = userService.getUserById(4L);
-        User mentor7 = userService.getUserById(7L);
-        User trainee1 = userService.getUserById(11L);
+        User mentor4 = userService.getUserById(1L);
+        User mentor7 = userService.getUserById(3L);
+        User trainee1 = userService.getUserById(1L);
         List<User> actual = new ArrayList<>();
         actual.add(mentor4);
         actual.add(mentor7);
@@ -170,7 +175,6 @@ class Sprint13HibernateWithSpringApplicationTests {
             user.setRole(User.Role.TRAINEE);
             expectedTrainees.add(user);
         }
-
 
         Assertions.assertEquals(expectedMentors, actualMentors, "checkGetAllMentors()");
         Assertions.assertEquals(expectedTrainees, actualTrainees, "checkGetAllTrainees()");
