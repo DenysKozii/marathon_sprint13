@@ -47,6 +47,34 @@ class Sprint13HibernateWithSpringApplicationTests {
     }
 
     private void fillDataBase() {
+        fillUserTable();
+    }
+
+    private void fillUserTable() {
+        for (User user : userService.getAll()) {
+            userService.deleteUser(user);
+        }
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setEmail("mentoruser" + i + "@dh.com");
+            user.setFirstName("MentorName" + i);
+            user.setLastName("MentorSurname" + i);
+            user.setPassword("qwertyqwerty" + i);
+            user.setRole(User.Role.MENTOR);
+            userService.createOrUpdateUser(user);
+        }
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setEmail("traineeUser" + i + "@dh.com");
+            user.setFirstName("TraineeName" + i);
+            user.setLastName("TraineeSurname" + i);
+            user.setPassword("qwerty^qwerty" + i);
+            user.setRole(User.Role.TRAINEE);
+            userService.createOrUpdateUser(user);
+        }
+    }
+
+    private void fillTaskTable() {
         for (User user : userService.getAll()) {
             userService.deleteUser(user);
         }

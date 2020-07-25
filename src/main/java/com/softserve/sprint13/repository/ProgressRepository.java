@@ -1,6 +1,5 @@
 package com.softserve.sprint13.repository;
 
-import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.entity.Progress;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProgressRepository extends JpaRepository<Progress,Long> {
+
     @Query(value = "select p.* from progress p \n" +
             "            left join users on p.trainee_id=users.id \n" +
             "            left join task on p.task_id=task.id \n" +
@@ -19,6 +19,7 @@ public interface ProgressRepository extends JpaRepository<Progress,Long> {
             "            where users.id=:userId and marathon.id=:marathonId",
             nativeQuery=true)
     List<Progress> allProgressByUserIdAndMarathonId(@Param("userId") Long userId, @Param("marathonId") Long marathonId);
+
     @Query(value = "select p.* from progress p \n" +
             "            left join users on p.trainee_id=users.id \n" +
             "            left join task on p.task_id=task.id \n" +

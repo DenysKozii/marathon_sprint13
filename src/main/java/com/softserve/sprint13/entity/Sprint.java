@@ -13,13 +13,13 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "sprint")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @StartBeforeEndDateValidation(message = "Start date should be before finish date.")
 public class Sprint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @EqualsAndHashCode.Exclude
     private Long id;
 
     @Temporal(TemporalType.DATE)
@@ -32,7 +32,15 @@ public class Sprint {
 
     @NotBlank(message = "Sprint title cannot be empty")
     @Column(name = "title", unique = true)
+    @EqualsAndHashCode.Include
     private String title;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "marathon_id")
+    @EqualsAndHashCode.Include
+    @ToString.Exclude
+    private Marathon marathon;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "sprint",

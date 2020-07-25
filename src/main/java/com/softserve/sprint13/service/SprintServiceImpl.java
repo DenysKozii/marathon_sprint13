@@ -61,4 +61,14 @@ public class SprintServiceImpl implements SprintService{
             return sprint.get();
         else throw new EntityNotFoundException("No sprint for given id");
     }
+
+    @Override
+    public Sprint deleteSprint(Sprint sprint) {
+        Long id = sprint.getId();
+        if(id != null) {
+            sprintRepository.deleteById(id);
+            return sprint;
+        }
+        return null;
+    }
 }

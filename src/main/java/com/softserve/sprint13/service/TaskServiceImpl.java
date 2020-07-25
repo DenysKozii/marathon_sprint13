@@ -2,6 +2,7 @@ package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Sprint;
 import com.softserve.sprint13.entity.Task;
+import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,34 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     TaskRepository taskRepository;
+    
+    @Autowired
+    SprintRepository sprintRepository;
+
 
     @Override
-    public Task addTaskToSprint(Task task, Sprint sprint) {
-        return sprint.getTasks().add(task)? task : null;
+    public Task createOrUpdateTask(Task task) {
+        if (task.getId() != null) {
+            Optional<Task> taskToUpdate = taskRepository.findById(task.getId());
+            if (taskToUpdate.isPresent()) {
+                Task newTask = taskToUpdate.get();
+                newTask.setTitle(task.getTitle()) ;
+                newTask.setProgressList(task.getProgressList());
+                newTask.setSprint(task.getSprint());
+                newTask = taskRepository.save(newTask);
+                return newTask;
+            }
+        }
+        task = taskRepository.save(task);
+        return task;
+    }
+    
+    @Override
+    public boolean addTaskToSprint(Task task, Sprint sprint) {
+        Task taskEntity = taskRepository.getOne(task.getId());
+        Sprint sprintEntity = sprintRepository.getOne(sprint.getId());
+        sprintEntity.getTasks().add(taskEntity);
+        return sprintRepository.save(sprintEntity)!=null;
     }
 
     @Override
@@ -32,6 +57,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task deleteTask(Task task) {
+        Long id = task.getId();
+        if(id != null) {
+            taskRepository.deleteById(id);
+            return task;
+        }
         return null;
     }
 }
