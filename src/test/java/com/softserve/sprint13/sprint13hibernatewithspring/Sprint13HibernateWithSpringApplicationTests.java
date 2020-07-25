@@ -2,14 +2,11 @@ package com.softserve.sprint13.sprint13hibernatewithspring;
 
 import com.softserve.sprint13.entity.*;
 import com.softserve.sprint13.service.*;
-import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.softserve.sprint13.entity.Progress.TaskStatus.FAIL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -53,55 +51,6 @@ class Sprint13HibernateWithSpringApplicationTests {
         Assertions.assertNotNull(marathonService);
     }
 
-    @BeforeTestClass
-    private void fillDataBase() {
-        Marathon marathon = new Marathon();
-        marathon.setTitle("Marathon1");
-        marathonService.createOrUpdateMarathon(marathon);
-
-        for (int i = 0; i < 2; i++) {
-            User mentor = new User();
-            mentor.setEmail("mentoruser" + i + "@dh.com");
-            mentor.setFirstName("MentorName" + i);
-            mentor.setLastName("MentorSurname" + i);
-            mentor.setPassword("qwertyqwerty" + i);
-            mentor.setRole(User.Role.MENTOR);
-            userService.createOrUpdateUser(mentor);
-            userService.addUserToMarathon(mentor, marathon);
-
-            User trainee = new User();
-            trainee.setEmail("traineeUser" + i + "@dh.com");
-            trainee.setFirstName("TraineeName" + i);
-            trainee.setLastName("TraineeSurname" + i);
-            trainee.setPassword("qwerty^qwerty" + i);
-            trainee.setRole(User.Role.TRAINEE);
-            userService.createOrUpdateUser(trainee);
-            userService.addUserToMarathon(trainee, marathon);
-        }
-
-        for (int i = 0; i < 2; i++) {
-            Sprint sprint = new Sprint();
-            sprint.setTitle("Sprint" + i);
-            sprint.setStartDate(Date.valueOf(LocalDate.now()));
-            sprint.setFinishDate(Date.valueOf(LocalDate.now().plusMonths(3 + 3 * i)));
-            sprintService.createOrUpdateSprint(sprint);
-            sprintService.addSprintToMarathon(sprint, marathon);
-
-            for (int j = 0; j < 2; j++) {
-                Task task = new Task();
-                task.setTitle("Task" + i + j);
-                taskService.createOrUpdateTask(task);
-                taskService.addTaskToSprint(task, sprint);
-
-                List<User> trainees = userService.getAllByRole("TRAINEE");
-                for (User trainee :
-                        trainees) {
-                    progressService.addTaskForStudent(task, trainee);
-                }
-            }
-        }
-    }
-
     @Test
     @Order(1)
     public void checkGetAllUsersByRole() {
@@ -132,13 +81,39 @@ class Sprint13HibernateWithSpringApplicationTests {
             expectedTrainees.add(trainee);
         }
 
-        Assertions.assertEquals(expectedMentors, actualMentors, "checkGetAllMentors()");
-        Assertions.assertEquals(expectedTrainees, actualTrainees, "checkGetAllTrainees()");
+        assertEquals(expectedMentors, actualMentors, "checkGetAllMentors()");
+        assertEquals(expectedTrainees, actualTrainees, "checkGetAllTrainees()");
+    }
+
+    @Test
+    @Order(1)
+    public void checkAllProgressByUserIdAndMarathonId() {
+        List<Long> expected = Arrays.asList(1L, 3L, 5L, 7L);
+        List<Long> actual = progressService.allProgressByUserIdAndMarathonId(2L, 1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        assertEquals(expected, actual, "checkAllProgressByUserIdAndMarathonId()");
+    }
+
+    @Test
+    @Order(1)
+    public void checkAllProgressByUserIdAndSprintId() {
+        List<Long> expected = Arrays.asList(1L, 3L);
+        List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L, 1L).stream()
+                .map(Progress::getId).collect(Collectors.toList());
+        assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
+    }
+
+    @Test
+    @Order(1)
+    public void checkSetStatus() {
+        progressService.setStatus(FAIL, progressService.getProgressById(1L));
+        Progress.TaskStatus actual = progressService.getProgressById(1L).getStatus();
+        assertEquals(FAIL, actual, "checkSetStatus()");
     }
 
     @Test
     @Order(2)
-    public void checkUpdateUsers() {
+    public void checkCreateOrUpdateUser() {
         User mentor1 = userService.getUserById(1L);
         User mentor2 = userService.getUserById(3L);
         User trainee1 = userService.getUserById(2L);
@@ -179,57 +154,173 @@ class Sprint13HibernateWithSpringApplicationTests {
         user3.setRole(User.Role.TRAINEE);
         expected.add(user3);
 
-        Assertions.assertEquals(expected, actual, "checkUpdateUsers()");
+        assertEquals(expected, actual, "checkUpdateUsers()");
     }
+
     @Test
-    @Order(3)
-    public void checkAllProgressByUserIdAndMarathonId() {
-        List<Long> expected = Arrays.asList(1L,3L,5L,7L);
-        List<Long> actual = progressService.allProgressByUserIdAndMarathonId(2L,1L).stream()
-                .map(Progress::getId).collect(Collectors.toList());
-        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndMarathonId()");
-    }
-    @Test
-    @Order(4)
-    public void checkAllProgressByUserIdAndSprintId() {
-        List<Long> expected = Arrays.asList(1L,3L);
-        List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L,1L).stream()
-                .map(Progress::getId).collect(Collectors.toList());
-        Assertions.assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
-    }
-    @Test
-    @Order(5)
-    public void checkSetStatus() {
-        progressService.setStatus(FAIL,progressService.getProgressById(1L));
-        Progress.TaskStatus actual = progressService.getProgressById(1L).getStatus();
-        Assertions.assertEquals(FAIL, actual, "checkSetStatus()");
-    }
-    @Test
-    @Order(6)
+    @Order(2)
     public void checkCreateOrUpdateProgress() {
         Progress progress = progressService.getProgressById(1L);
         progress.setTask(taskService.getTaskById(3L));
         progress.setTrainee(userService.getUserById(1L));
         Progress actual = progressService.createOrUpdateProgress(progress);
         actual = progressService.getProgressById(actual.getId());
-        Assertions.assertEquals(progress, actual, "checkSetStatus()");
+        assertEquals(progress, actual, "checkSetStatus()");
     }
+
     @Test
-    @Order(7)
+    @Order(2)
     public void checkCreateOrUpdateMarathon() {
         Marathon marathon = marathonService.getMarathonById(1L);
         marathon.setTitle("MarathonNew");
         Marathon actual = marathonService.createOrUpdateMarathon(marathon);
         actual = marathonService.getMarathonById(actual.getId());
-        Assertions.assertEquals(marathon, actual, "checkCreateOrUpdateMarathon()");
+        assertEquals(marathon, actual, "checkCreateOrUpdateMarathon()");
     }
+
     @Test
-    @Order(8)
+    @Order(2)
     public void checkCreateOrUpdateSprint() {
         Sprint sprint = sprintService.getSprintById(1L);
         sprint.setTitle("newSprint");
         Sprint actual = sprintService.createOrUpdateSprint(sprint);
         actual = sprintService.getSprintById(actual.getId());
-        Assertions.assertEquals(sprint, actual, "checkCreateOrUpdateSprint()");
+        assertEquals(sprint, actual, "checkCreateOrUpdateSprint()");
+    }
+
+    @Test
+    @Order(2)
+    public void checkCreateOrUpdateTask() {
+        Task task = taskService.getTaskById(1L);
+        task.setTitle("newTask");
+        Task actual = taskService.createOrUpdateTask(task);
+        assertEquals(task, actual, "checkCreateOrUpdateTask()");
+    }
+
+
+    @Test
+    @Order(4)
+    public void checkDeleteUser() {
+        Throwable e = new Throwable();
+        userService.deleteUser(userService.getUserById(1L));
+        try {
+            userService.getUserById(1L);
+        } catch (EntityNotFoundException ex) {
+            e = ex;
+        }
+        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteUser()");
+    }
+
+    @Test
+    @Order(3)
+    public void checkDeleteProgress() {
+        Throwable e = new Throwable();
+        progressService.deleteProgress(progressService.getProgressById(1L));
+        try {
+            progressService.getProgressById(1L);
+        } catch (EntityNotFoundException ex) {
+            e = ex;
+        }
+        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteProgress()");
+    }
+
+    @Test
+    @Order(5)
+    public void checkDeleteTaskFail() {
+        Throwable e = new Throwable();
+        try {
+            taskService.deleteTask(taskService.getTaskById(1L));
+        } catch (RuntimeException ex) {
+            e = ex;
+        }
+        assertEquals("Can't remove a task that has progress entities.", e.getMessage(), "checkDeleteTaskFail()");
+    }
+
+    @Test
+    @Order(7)
+    public void checkDeleteTaskSuccess() {
+        Throwable e = new Throwable();
+        Task task = taskService.getTaskById(1L);
+        List<Progress> progressList = progressService.getAllProgressesOfTask(task);
+        for (Progress p :
+                progressList) {
+            progressService.deleteProgress(p);
+        }
+        taskService.deleteTask(task);
+        try {
+            taskService.getTaskById(1L);
+        } catch (EntityNotFoundException ex) {
+            e = ex;
+        }
+        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteTaskSuccess()");
+    }
+
+    @Test
+    @Order(5)
+    public void checkDeleteSprintFail() {
+        Throwable e = new Throwable();
+        try {
+            sprintService.deleteSprint(sprintService.getSprintById(1L));
+        } catch (RuntimeException ex) {
+            e = ex;
+        }
+        assertEquals("Can't remove a sprint that has tasks.", e.getMessage(), "checkDeleteSprintFail()");
+    }
+
+    @Test
+    @Order(8)
+    public void checkDeleteSprintSuccess() {
+        Throwable e = new Throwable();
+        Sprint sprint = sprintService.getSprintById(1L);
+        Task task = taskService.getTaskById(2L);
+        List<Progress> progressList = progressService.getAllProgressesOfTask(task);
+        for (Progress p :
+                progressList) {
+            progressService.deleteProgress(p);
+        }
+        taskService.deleteTask(task);
+        sprintService.deleteSprint(sprint);
+        try {
+            sprintService.getSprintById(1L);
+        } catch (EntityNotFoundException ex) {
+            e = ex;
+        }
+        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteSprintSuccess()");
+    }
+    
+    @Test
+    @Order(5)
+    public void checkDeleteMarathonFail() {
+        Throwable e = new Throwable();
+        try {
+            marathonService.deleteMarathonById(1L);
+        } catch (RuntimeException ex) {
+            e = ex;
+        }
+        assertEquals("Can't remove a marathon that has sprints.", e.getMessage(), "checkDeleteMarathonFail()");
+    }
+
+    @Test
+    @Order(9)
+    public void checkDeleteMarathonSuccess() {
+        Throwable e = new Throwable();
+        Sprint sprint = sprintService.getSprintById(2L);
+        for(Long i = 3L; i < 5; i++) {
+            Task task = taskService.getTaskById(i);
+            List<Progress> progressList = progressService.getAllProgressesOfTask(task);
+            for (Progress p :
+                    progressList) {
+                progressService.deleteProgress(p);
+            }
+            taskService.deleteTask(task);
+        }
+        sprintService.deleteSprint(sprint);
+        marathonService.deleteMarathonById(1L);
+        try {
+            marathonService.getMarathonById(1L);
+        } catch (EntityNotFoundException ex) {
+            e = ex;
+        }
+        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteMarathonSuccess()");
     }
 }

@@ -40,7 +40,6 @@ public class Marathon {
     @ToString.Exclude
     private List<Sprint> sprints;
 
-
     @PreRemove
     public void checkSprintAssociationBeforeRemoval() {
         if (!this.sprints.isEmpty()) {

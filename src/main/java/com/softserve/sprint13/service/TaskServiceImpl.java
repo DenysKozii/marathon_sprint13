@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -54,6 +56,14 @@ public class TaskServiceImpl implements TaskService {
         if (task.isPresent())
             return task.get();
         else throw new EntityNotFoundException("No task for given id");
+    }
+
+    @Override
+    public List<Task> getAllTasksOfSprint(Sprint sprint) {
+        return taskRepository.findAll()
+                .stream()
+                .filter(task -> task.getSprint().equals(sprint))
+                .collect(Collectors.toList());
     }
 
     @Override

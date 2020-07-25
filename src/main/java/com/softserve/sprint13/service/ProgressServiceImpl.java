@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -94,6 +95,19 @@ public class ProgressServiceImpl implements ProgressService {
         Progress progressEntity = progressRepository.getOne(progress.getId());
         userEntity.getProgressList().add(progressEntity);
         return userRepository.save(userEntity) != null;
+    }
+
+    @Override
+    public List<Progress> getAll() {
+        return progressRepository.findAll();
+    }
+
+    @Override
+    public List<Progress> getAllProgressesOfTask(Task task) {
+        return progressRepository.findAll()
+                .stream()
+                .filter(progress -> progress.getTask().equals(task))
+                .collect(Collectors.toList());
     }
     
     @Override

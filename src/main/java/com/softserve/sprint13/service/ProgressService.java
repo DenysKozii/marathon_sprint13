@@ -14,5 +14,10 @@ public interface ProgressService {
     public List<Progress> allProgressByUserIdAndMarathonId(Long userId, Long marathonId);
     public List<Progress> allProgressByUserIdAndSprintId(Long userId, Long sprintId);
     public boolean addProgressToUser(Progress progress, com.softserve.sprint13.entity.User user);
+
+    List<Progress> getAll();
+
+    List<Progress> getAllProgressesOfTask(Task task);
+
     public Progress deleteProgress(Progress progress);
 }
