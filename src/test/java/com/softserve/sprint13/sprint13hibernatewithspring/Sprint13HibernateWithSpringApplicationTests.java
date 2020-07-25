@@ -1,12 +1,12 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
 import com.softserve.sprint13.entity.*;
+import com.softserve.sprint13.exception.IncorrectIdException;
 import com.softserve.sprint13.service.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -205,10 +205,10 @@ class Sprint13HibernateWithSpringApplicationTests {
         userService.deleteUser(userService.getUserById(1L));
         try {
             userService.getUserById(1L);
-        } catch (EntityNotFoundException ex) {
+        } catch (IncorrectIdException ex) {
             e = ex;
         }
-        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteUser()");
+        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteUser()");
     }
 
     @Test
@@ -218,10 +218,10 @@ class Sprint13HibernateWithSpringApplicationTests {
         progressService.deleteProgress(progressService.getProgressById(1L));
         try {
             progressService.getProgressById(1L);
-        } catch (EntityNotFoundException ex) {
+        } catch (IncorrectIdException ex) {
             e = ex;
         }
-        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteProgress()");
+        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteProgress()");
     }
 
     @Test
@@ -249,10 +249,10 @@ class Sprint13HibernateWithSpringApplicationTests {
         taskService.deleteTask(task);
         try {
             taskService.getTaskById(1L);
-        } catch (EntityNotFoundException ex) {
+        } catch (IncorrectIdException ex) {
             e = ex;
         }
-        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteTaskSuccess()");
+        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteTaskSuccess()");
     }
 
     @Test
@@ -282,12 +282,12 @@ class Sprint13HibernateWithSpringApplicationTests {
         sprintService.deleteSprint(sprint);
         try {
             sprintService.getSprintById(1L);
-        } catch (EntityNotFoundException ex) {
+        } catch (IncorrectIdException ex) {
             e = ex;
         }
-        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteSprintSuccess()");
+        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteSprintSuccess()");
     }
-    
+
     @Test
     @Order(5)
     public void checkDeleteMarathonFail() {
@@ -305,7 +305,7 @@ class Sprint13HibernateWithSpringApplicationTests {
     public void checkDeleteMarathonSuccess() {
         Throwable e = new Throwable();
         Sprint sprint = sprintService.getSprintById(2L);
-        for(Long i = 3L; i < 5; i++) {
+        for (Long i = 3L; i < 5; i++) {
             Task task = taskService.getTaskById(i);
             List<Progress> progressList = progressService.getAllProgressesOfTask(task);
             for (Progress p :
@@ -318,9 +318,9 @@ class Sprint13HibernateWithSpringApplicationTests {
         marathonService.deleteMarathonById(1L);
         try {
             marathonService.getMarathonById(1L);
-        } catch (EntityNotFoundException ex) {
+        } catch (IncorrectIdException ex) {
             e = ex;
         }
-        assertEquals(EntityNotFoundException.class, e.getClass(), "checkDeleteMarathonSuccess()");
+        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteMarathonSuccess()");
     }
 }
