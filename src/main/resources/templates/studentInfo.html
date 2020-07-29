@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{/fragments :: js-lb}"></div>
+<div th:replace="~{/fragments :: header}"></div>
+<div th:replace="~{/fragments :: navbar}"></div>
+<body>
+<div>
+    <form th:object="${user}" >
+        <h3>Student info</h3>
+        <fieldset>
+            <h4>Id:</h4>
+            <p th:text="${user.id}"></p>
+        </fieldset>
+        <fieldset>
+            <h4>First name:</h4>
+            <p th:text="${user.firstName}"></p>
+        </fieldset>
+        <fieldset>
+            <h4>Last name:</h4>
+            <p th:text="${user.lastName}"></p>
+        </fieldset>
+        <fieldset>
+            <h4>Email:</h4>
+            <p th:text="${user.email}"></p>
+        </fieldset>
+        <fieldset>
+            <h4>Password:</h4>
+            <p th:text="${user.password}"></p>
+        </fieldset>
+        <fieldset>
+            <h4>Role:</h4>
+            <p th:text="${user.role}"></p>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{/fragments :: js-lb}"></div>
+<div th:replace="~{/fragments :: header}"></div>
+<div th:replace="~{/fragments :: navbar}"></div>
+
+<body>
+<table border="2" class="table <#if active?? && !active>table-dark <#else> table-striped </#if>">
+    <thead class="<#if active?? && !active>thead-light <#else> thead-dark </#if>">
+    <tr class="d-flex">
+        <th scope="col" class="col-1"> Id</th>
+        <th scope="col" class="col-2"> Name</th>
+        <span th:if="${!add}">
+        <th scope="col" class="col-2"> Edit</th>
+        <th scope="col" class="col-2"> Remove</th>
+            <th scope="col" class="col-2"> Add marathon</th>
+        </span>
+        <span th:if="${add}">
+            <th scope="col" class="col-2"> Select</th>
+        </span>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="d-flex" th:each="student : ${students}">
+        <th scope="row" class="col-1" th:text="${student.id}"> Id</th>
+        <td>
+            <a th:href="@{/students/studentInfo/{student_id}(student_id = ${student.id})}" th:text="${student.getFirstName()}"> First
+                name</a>
+            <a th:href="@{/students/studentInfo/{student_id}(student_id = ${student.id})}" th:text="${student.getLastName()}"> Last
+                name</a>
+        </td>
+        <span th:if="${!add}">
+        <td>
+            <span th:if="${marathon_id !=  null}">
+                <a th:href="@{/students/{marathon_id}/edit/{student_id}(marathon_id = ${marathon_id},student_id=${student.id})}"> Edit </a>
+            </span>
+            <span th:if="${marathon_id ==  null}">
+                <a th:href="@{/students/edit/{student_id}(student_id=${student.id})}"> Edit </a>
+            </span>
+        </td>
+        <td>
+            <span th:if="${marathon_id !=  null}">
+                <a th:href="@{/students/{marathon_id}/delete/{student_id}(marathon_id = ${marathon_id},student_id=${student.id})}"> Remove </a>
+            </span>
+            <span th:if="${marathon_id ==  null}">
+                <a th:href="@{/students/delete/{student_id}(student_id=${student.id})}"> Remove </a>
+            </span>
+        </td>
+            <td>
+                <a th:href="@{/students/{student_id}/addMarathon(student_id=${student.id})}"> Add marathon </a>
+            </td>
+        </span>
+        <span th:if="${add}">
+        <td>
+            <a th:href="@{/students/{marathon_id}/add/{student_id}(marathon_id = ${marathon_id},student_id=${student.id})}"> Select </a>
+        </td>
+        </span>
+    </tr>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

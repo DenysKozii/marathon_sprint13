@@ -12,6 +12,8 @@ public interface UserService {
 
     public User getUserById(Long id);
 
+    void deleteUserByIdFromMarathon(Long user_id, Long marathon_id);
+
     public User createOrUpdateUser(User user);
 
     public List<User> getAllByRole(String role);
@@ -21,4 +23,10 @@ public interface UserService {
     public boolean addUserToProgress(User user, Progress progress);
 
     public User deleteUser(User user);
+
+    List<User> studentsFromMarathon(Long marathon_id);
+
+    List<User> studentsNotFromMarathon(Long marathon_id);
+
+    List<Marathon> marathonsWithoutStudent(Long student_id);
 }

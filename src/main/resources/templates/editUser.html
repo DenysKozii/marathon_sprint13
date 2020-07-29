@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{/fragments :: js-lb}"></div>
+<div th:replace="~{/fragments :: header}"></div>
+<div th:replace="~{/fragments :: navbar}"></div>
+<body>
+<div>
+    <form th:id="user" th:action="@{/students/edit}" th:object="${user}" method="post">
+        <h3>Student info</h3>
+        <fieldset>
+            <label>Id:</label>
+            <input type="text" name="id" th:value="${user.id}" readonly>
+        </fieldset>
+        <fieldset>
+            <label>First name:</label>
+            <input type="text" name="firstName" th:value="${user.firstName}">
+        </fieldset>
+        <fieldset>
+            <label>Last name:</label>
+            <input type="text" name="lastName" th:value="${user.lastName}">
+        </fieldset>
+        <fieldset>
+            <label>Email:</label>
+            <input type="text" name="email" th:value="${user.email}">
+        </fieldset>
+        <fieldset>
+            <label>Password:</label>
+            <input type="text" name="password" th:value="${user.password}">
+        </fieldset>
+        <fieldset>
+            <label>Role:</label>
+            <input type="text" name="role" th:value="${user.role}">
+        </fieldset>
+        <button type="submit">UPDATE</button>
+    </form>
+</div>
+</body>
+</html>

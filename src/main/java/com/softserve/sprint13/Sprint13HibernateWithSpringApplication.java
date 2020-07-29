@@ -45,7 +45,7 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
             marathon.setTitle("Marathon1");
             marathonService.createOrUpdateMarathon(marathon);
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 User mentor = new User();
                 mentor.setEmail("mentoruser" + i + "@dh.com");
                 mentor.setFirstName("MentorName" + i);
@@ -65,7 +65,7 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
                 userService.addUserToMarathon(trainee, marathon);
             }
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 Sprint sprint = new Sprint();
                 sprint.setTitle("Sprint" + i);
                 sprint.setStartDate(Date.valueOf(LocalDate.now()));
@@ -73,7 +73,7 @@ public class Sprint13HibernateWithSpringApplication implements CommandLineRunner
                 sprintService.createOrUpdateSprint(sprint);
                 sprintService.addSprintToMarathon(sprint, marathon);
 
-                for (int j = 0; j < 2; j++) {
+                for (int j = 0; j < 3; j++) {
                     Task task = new Task();
                     task.setTitle("Task" + i + j);
                     taskService.createOrUpdateTask(task);

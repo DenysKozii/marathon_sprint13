@@ -45,6 +45,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUserByIdFromMarathon(Long user_id, Long marathon_id) {
+        Optional<Marathon> marathonFromBd = marathonRepository.findById(marathon_id);
+        Optional<User> user = userRepository.findById(user_id);
+        if (user.isPresent() && marathonFromBd.isPresent()) {
+            marathonFromBd.get().getUsers().remove(user);
+            marathonRepository.save(marathonFromBd.get());
+            user.get().getMarathons().remove(marathonFromBd);
+            userRepository.save(user.get());
+        } else throw new EntityNotFoundException("No user exist for given id");
+    }
+
+
+    @Override
     public User createOrUpdateUser(User user) {
         if (user.getId() != null) {
             Optional<User> userToUpdate = userRepository.findById(user.getId());
@@ -96,5 +109,27 @@ public class UserServiceImpl implements UserService {
         Progress progressEntity = progressRepository.getOne(progress.getId());
         progressEntity.setTrainee(userEntity);
         return progressRepository.save(progressEntity) != null;
+    }
+
+    @Override
+    public List<User> studentsFromMarathon(Long marathon_id) {
+        List<User> users = getAllByRole("TRAINEE");
+        Marathon marathon = marathonRepository.getOne(marathon_id);
+        return users.isEmpty() ? new ArrayList<>() : users.stream().filter(o->o.getMarathons().contains(marathon)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> studentsNotFromMarathon(Long marathon_id) {
+        List<User> users = getAllByRole("TRAINEE");
+        Marathon marathon = marathonRepository.getOne(marathon_id);
+        return users.isEmpty() ? new ArrayList<>() : users.stream().filter(o->!o.getMarathons().contains(marathon)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Marathon> marathonsWithoutStudent(Long student_id) {
+        User student = userRepository.getOne(student_id);
+        List<Marathon> marathons = marathonRepository.findAll();
+        return marathons.isEmpty() ? new ArrayList<>() : marathons.stream().filter(o->!o.getUsers().contains(student))
+                .collect(Collectors.toList());
     }
 }

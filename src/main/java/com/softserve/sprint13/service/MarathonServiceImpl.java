@@ -2,6 +2,7 @@ package com.softserve.sprint13.service;
 
 import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.entity.Sprint;
+import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.exception.IncorrectIdException;
 import com.softserve.sprint13.repository.MarathonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -57,4 +59,5 @@ public class MarathonServiceImpl implements MarathonService {
             marathonRepository.deleteById(id);
         else throw new IncorrectIdException("No marathon for given id");
     }
+
 }

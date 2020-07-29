@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{/fragments :: js-lb}"></div>
+<div th:replace="~{/fragments :: header}"></div>
+<div th:replace="~{/fragments :: navbar}"></div>
+<body>
+<table border="2" class="table <#if active?? && !active>table-dark <#else> table-striped </#if>">
+    <thead class="<#if active?? && !active>thead-light <#else> thead-dark </#if>">
+    <tr class="d-flex">
+        <th scope="col" class="col-1"> Id</th>
+        <th scope="col" class="col-2"> Title</th>
+        <span th:if="${!add}">
+            <th scope="col" class="col-2"> Edit</th>
+            <th scope="col" class="col-2"> Delete</th>
+            <th scope="col" class="col-2"> Add student</th>
+        </span>
+        <span th:if="${add}">
+            <th scope="col" class="col-2"> Select</th>
+        </span>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr class="d-flex" th:each="marathon : ${marathons}">
+        <th scope="row" class="col-1" th:text="${marathon.id}"> Id</th>
+        <td>
+            <a th:href="@{/students/{marathon_id}(marathon_id = ${marathon.id})}" th:text="${marathon.title}"> Title </a>
+        </td>
+        <span th:if="${!add}">
+        <td>
+            <a th:href="@{/marathons/edit/{id}(id = ${marathon.id})}"> Edit </a>
+        </td>
+        <td>
+            <a th:href="@{/marathons/delete/{id}(id = ${marathon.id})}"> Delete </a>
+        </td>
+        <td>
+            <a th:href="@{/students/{marathon_id}/add(marathon_id = ${marathon.id})}"> Add student </a>
+        </td>
+        </span>
+        <span th:if="${add}">
+        <td>
+            <a th:href="@{/students/{student_id}/addMarathon/{marathon_id}(marathon_id = ${marathon.id},student_id=${student_id})}"> Select </a>
+        </td>
+        </span>
+    </tr>
+    </tbody>
+</table>
+<!--<td>-->
+<!--    <button onclick="window.location.href='/marathons/create'">Create</button>-->
+<!--</td>-->
+</body>
+</html>

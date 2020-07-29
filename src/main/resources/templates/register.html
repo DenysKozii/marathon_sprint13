@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:replace="~{/fragments :: js-lb}"></div>
+<div th:replace="~{/fragments :: header}"></div>
+<div th:replace="~{/fragments :: navbar}"></div>
+<body>
+<div>
+    <form th:id="user" th:action="@{/students/register}" method="post">
+        <h3>Student form</h3>
+        <fieldset>
+            <label>First name:</label>
+            <input type="text" name="firstName">
+        </fieldset>
+
+        <fieldset>
+            <label>Last name:</label>
+            <input type="text" name="lastName">
+        </fieldset>
+
+        <fieldset>
+            <label>Email:</label>
+            <input type="text" name="email">
+        </fieldset>
+
+        <fieldset>
+            <label>Role:</label>
+            <input type="text" name="role">
+        </fieldset>
+
+        <fieldset>
+            <label>Password:</label>
+            <input type="text" name="password">
+        </fieldset>
+
+        <button type="submit">CREATE</button>
+    </form>
+</div>
+</body>
+</html>
