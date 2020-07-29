@@ -90,7 +90,7 @@ public class StudentController {
         Marathon marathon = marathonService.getMarathonById(marathon_id);
         userService.addUserToMarathon(student, marathon);
         //{marathon_id}
-        return "redirect:/students";
+        return "redirect:/students/{marathon_id}/add";
     }
     @GetMapping("/students/{marathon_id}/add")
     public String findStudentForAdd(@PathVariable("marathon_id") Long marathon_id, Model model) {
@@ -118,8 +118,10 @@ public class StudentController {
         User student = userService.getUserById(student_id);
         Marathon marathon = marathonService.getMarathonById(marathon_id);
         userService.addUserToMarathon(student, marathon);
+        List<User> students = userService.getAllByRole("TRAINEE");
         model.addAttribute("add", false);
-        return "students";
+        model.addAttribute("students",students);
+        return "redirect:/students/{student_id}/addMarathon";
     }
 
     @GetMapping("/students/studentInfo/{student_id}")

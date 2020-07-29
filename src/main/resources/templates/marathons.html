@@ -6,23 +6,22 @@
 <body>
 <table border="2" class="table <#if active?? && !active>table-dark <#else> table-striped </#if>">
     <thead class="<#if active?? && !active>thead-light <#else> thead-dark </#if>">
-    <tr class="d-flex">
-        <th scope="col" class="col-1"> Id</th>
-        <th scope="col" class="col-2"> Title</th>
+    <tr>
+        <th scope="col" > Id</th>
+        <th scope="col" > Title</th>
         <span th:if="${!add}">
-            <th scope="col" class="col-2"> Edit</th>
-            <th scope="col" class="col-2"> Delete</th>
-            <th scope="col" class="col-2"> Add student</th>
+            <th scope="col"> Edit</th>
+            <th scope="col"> Delete</th>
+            <th scope="col"> Add student</th>
         </span>
         <span th:if="${add}">
             <th scope="col" class="col-2"> Select</th>
         </span>
     </tr>
     </thead>
-
     <tbody>
-    <tr class="d-flex" th:each="marathon : ${marathons}">
-        <th scope="row" class="col-1" th:text="${marathon.id}"> Id</th>
+    <tr th:each="marathon : ${marathons}">
+        <th scope="row" th:text="${marathon.id}"> Id</th>
         <td>
             <a th:href="@{/students/{marathon_id}(marathon_id = ${marathon.id})}" th:text="${marathon.title}"> Title </a>
         </td>
@@ -43,10 +42,8 @@
         </td>
         </span>
     </tr>
+    </tr>
     </tbody>
 </table>
-<!--<td>-->
-<!--    <button onclick="window.location.href='/marathons/create'">Create</button>-->
-<!--</td>-->
 </body>
 </html>
