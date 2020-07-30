@@ -1,0 +1,9 @@
+[2020-07-30 20:57:38.129] - 10516 INFO [restartedMain] --- org.apache.catalina.core.StandardService: Starting service [Tomcat]
+[2020-07-30 20:57:38.131] - 10516 INFO [restartedMain] --- org.apache.catalina.core.StandardEngine: Starting Servlet engine: [Apache Tomcat/9.0.36]
+[2020-07-30 20:57:38.402] - 10516 INFO [restartedMain] --- org.apache.jasper.servlet.TldScanner: At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+[2020-07-30 20:57:38.407] - 10516 INFO [restartedMain] --- org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]: Initializing Spring embedded WebApplicationContext
+[2020-07-30 20:57:38.716] - 10516 INFO [task-1] --- org.hibernate.jpa.internal.util.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: default]
+[2020-07-30 20:57:38.770] - 10516 INFO [task-1] --- org.hibernate.Version: HHH000412: Hibernate ORM core version 5.4.18.Final
+[2020-07-30 20:57:38.923] - 10516 INFO [task-1] --- org.hibernate.annotations.common.Version: HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+[2020-07-30 20:57:39.053] - 10516 INFO [task-1] --- org.hibernate.dialect.Dialect: HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+[2020-07-30 20:57:39.876] - 10516 INFO [task-1] --- org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
