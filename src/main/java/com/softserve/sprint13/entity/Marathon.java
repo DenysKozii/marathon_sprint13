@@ -20,7 +20,8 @@ public class Marathon {
     private Long id;
 
     @NotBlank(message = "Marathon title cannot be empty")
-    @Column(name = "title", unique = true)
+//    @Column(name = "title", unique = true)
+    @Column(name = "title")
     @EqualsAndHashCode.Include
     private String title;
 

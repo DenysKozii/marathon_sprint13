@@ -27,7 +27,8 @@ public class User {
     private Long id;
 
     @NotNull
-    @Column(name = "email", unique = true)
+//    @Column(name = "email", unique = true)
+    @Column(name = "email")
     @Pattern(regexp=".+@.+\\..+", message = "Please provide a valid email address")
     @EqualsAndHashCode.Include
     private String email;

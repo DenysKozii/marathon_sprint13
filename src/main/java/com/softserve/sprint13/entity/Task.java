@@ -33,7 +33,8 @@ public class Task {
     private Date updateDate;
 
     @NotBlank(message = "Task title cannot be empty")
-    @Column(name = "title", unique = true)
+//    @Column(name = "title", unique = true)
+    @Column(name = "title")
     @EqualsAndHashCode.Include
     private String title;
 
