@@ -132,4 +132,9 @@ public class UserServiceImpl implements UserService {
         return marathons.isEmpty() ? new ArrayList<>() : marathons.stream().filter(o->!o.getUsers().contains(student))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<User> findByRole(User.Role role) {
+        return userRepository.findByRole(role);
+    }
 }

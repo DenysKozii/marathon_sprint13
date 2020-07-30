@@ -29,4 +29,7 @@ public interface UserService {
     List<User> studentsNotFromMarathon(Long marathon_id);
 
     List<Marathon> marathonsWithoutStudent(Long student_id);
+
+    List<User> findByRole(User.Role role);
+
 }
