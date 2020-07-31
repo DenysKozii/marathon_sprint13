@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +51,16 @@ public class MarathonServiceTest {
     expected.add(marathon2);
     when(marathonRepository.findAll()).thenReturn(Arrays.asList(marathon1, marathon2));
     List<Marathon> actual = marathonService.getAll();
+    Assertions.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void createOrUpdateMarathonTest() {
+    Marathon expected = new Marathon();
+    expected.setTitle("marathonNew");
+    expected.setId(1L);
+    doReturn(expected).when(marathonRepository).save(any());
+    Marathon actual = marathonService.createOrUpdateMarathon(expected);
     Assertions.assertEquals(expected, actual);
   }
 
