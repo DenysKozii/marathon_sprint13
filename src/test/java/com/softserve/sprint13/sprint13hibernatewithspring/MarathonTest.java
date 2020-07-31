@@ -3,6 +3,7 @@ package com.softserve.sprint13.sprint13hibernatewithspring;
 import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.service.MarathonService;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ public class MarathonTest {
   @Autowired
   private MarathonService marathonService;
 
+  @Test
   public void getAllMarathonTest() throws Exception {
     List<Marathon> expected = marathonService.getAll();
 
@@ -30,6 +32,8 @@ public class MarathonTest {
         .andExpect(MockMvcResultMatchers.model().attributeExists("marathons"))
         .andExpect(MockMvcResultMatchers.model().attribute("marathons", expected));
   }
+
+
 
 
 }
