@@ -1,5 +1,6 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 import com.softserve.sprint13.entity.Sprint;
@@ -40,7 +41,21 @@ public class SprintServiceTest {
     Assertions.assertEquals(expected, actual);
   }
 
-  
+  @Test
+  public void createOrUpdateSprintTest() throws ParseException {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    Date finishData = dateFormat.parse("12/12/2019");
+    Date startData = dateFormat.parse("12/12/2020");
+    Sprint expected = new Sprint();
+    expected.setTitle("sprintNew");
+    expected.setFinishDate(finishData);
+    expected.setStartDate(startData);
+    expected.setId(1L);
+    doReturn(expected).when(sprintRepository).save(any());
+    Sprint actual = sprintService.createOrUpdateSprint(expected);
+    Assertions.assertEquals(expected, actual);
+
+  }
 
 
 }
