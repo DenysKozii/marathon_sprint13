@@ -7,6 +7,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.validation.ConstraintViolationException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -31,6 +34,7 @@ class Sprint13HibernateWithSpringApplicationTests {
     @Autowired
     MarathonService marathonService;
 
+    private static boolean counter = true;
     @Autowired
     public Sprint13HibernateWithSpringApplicationTests(UserService userService, TaskService taskService,
                                                        ProgressService progressService, SprintService sprintService,
@@ -40,8 +44,61 @@ class Sprint13HibernateWithSpringApplicationTests {
         this.progressService = progressService;
         this.sprintService = sprintService;
         this.marathonService = marathonService;
+        if (counter)
+            fillDataBase();
+        counter = false;
     }
+    private void fillDataBase() {
+        try {
+            Marathon marathon = new Marathon();
+            marathon.setTitle("Marathon1");
+            marathonService.createOrUpdateMarathon(marathon);
 
+            for (int i = 0; i < 4; i++) {
+                User mentor = new User();
+                mentor.setEmail("mentoruser" + i + "@dh.com");
+                mentor.setFirstName("MentorName" + i);
+                mentor.setLastName("MentorSurname" + i);
+                mentor.setPassword("qwertyqwerty" + i);
+                mentor.setRole(User.Role.MENTOR);
+                userService.createOrUpdateUser(mentor);
+                userService.addUserToMarathon(mentor, marathon);
+
+                User trainee = new User();
+                trainee.setEmail("traineeUser" + i + "@dh.com");
+                trainee.setFirstName("TraineeName" + i);
+                trainee.setLastName("TraineeSurname" + i);
+                trainee.setPassword("qwerty^qwerty" + i);
+                trainee.setRole(User.Role.TRAINEE);
+                userService.createOrUpdateUser(trainee);
+                userService.addUserToMarathon(trainee, marathon);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                Sprint sprint = new Sprint();
+                sprint.setTitle("Sprint" + i);
+                sprint.setStartDate(Date.valueOf(LocalDate.now()));
+                sprint.setFinishDate(Date.valueOf(LocalDate.now().plusMonths(3 + 3 * i)));
+                sprintService.createOrUpdateSprint(sprint);
+                sprintService.addSprintToMarathon(sprint, marathon);
+
+                for (int j = 0; j < 3; j++) {
+                    Task task = new Task();
+                    task.setTitle("Task" + i + j);
+                    taskService.createOrUpdateTask(task);
+                    taskService.addTaskToSprint(task, sprint);
+
+                    List<User> trainees = userService.findByRole(User.Role.TRAINEE);
+                    for (User trainee :
+                            trainees) {
+                        progressService.addTaskForStudent(task, trainee);
+                    }
+                }
+            }
+        } catch (ConstraintViolationException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     @Test
     void contextLoads() {
         Assertions.assertNotNull(userService);
@@ -278,14 +335,14 @@ class Sprint13HibernateWithSpringApplicationTests {
                 progressList) {
             progressService.deleteProgress(p);
         }
-        taskService.deleteTask(task);
-        sprintService.deleteSprint(sprint);
         try {
+            taskService.deleteTask(task);
+            sprintService.deleteSprint(sprint);
             sprintService.getSprintById(1L);
-        } catch (IncorrectIdException ex) {
+        } catch (RuntimeException ex) {
             e = ex;
         }
-        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteSprintSuccess()");
+        assertEquals(RuntimeException.class, e.getClass(), "checkDeleteSprintSuccess()");
     }
 
     @Test
@@ -314,13 +371,13 @@ class Sprint13HibernateWithSpringApplicationTests {
             }
             taskService.deleteTask(task);
         }
+        try {
         sprintService.deleteSprint(sprint);
         marathonService.deleteMarathonById(1L);
-        try {
-            marathonService.getMarathonById(1L);
-        } catch (IncorrectIdException ex) {
+        marathonService.getMarathonById(1L);
+        } catch (RuntimeException ex) {
             e = ex;
         }
-        assertEquals(IncorrectIdException.class, e.getClass(), "checkDeleteMarathonSuccess()");
+        assertEquals(RuntimeException.class, e.getClass(), "checkDeleteMarathonSuccess()");
     }
 }

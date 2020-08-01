@@ -140,6 +140,8 @@ public class UserServiceTest {
         Marathon marathon = new Marathon();
         marathon.setUsers(students);
         marathon.setId(1L);
+        user1.setMarathons(Arrays.asList(marathon));
+        user2.setMarathons(Arrays.asList(marathon));
 
 //        doReturn(students).when(userRepository).findByRole(User.Role.TRAINEE);
         when(userRepository.findByRole(User.Role.TRAINEE)).thenReturn(students);
