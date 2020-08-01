@@ -166,4 +166,17 @@ public class StudentTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("user", expected));
     }
 
+    @Test
+    public void addMarathonTest() throws Exception {
+        User student = userService.getUserById(1L);
+        Marathon marathon = marathonService.getMarathonById(1L);
+        userService.addUserToMarathon(student, marathon);
+        List<User> expected = userService.findByRole(User.Role.TRAINEE);
+        mockMvc.perform(MockMvcRequestBuilders.get("/students/1/addMarathon/1"))
+//                .andExpect(MockMvcResultMatchers.model().attributeExists("students"))
+                .andExpect(MockMvcResultMatchers.model().attribute("students", expected))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("add"))
+                .andExpect(MockMvcResultMatchers.model().attribute("add", false))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+    }
 }
