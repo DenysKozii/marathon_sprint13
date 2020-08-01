@@ -31,9 +31,19 @@ public class MarathonTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.model().attributeExists("marathons"))
         .andExpect(MockMvcResultMatchers.model().attribute("marathons", expected));
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.model().attributeExists("marathons"))
+        .andExpect(MockMvcResultMatchers.model().attribute("marathons", expected));
   }
 
-
+  @Test
+  public void createMarathonTest() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/marathons/create")
+        .param("title","newMarathon"))
+        .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+  }
 
 
 }
