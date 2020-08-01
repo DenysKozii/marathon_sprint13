@@ -15,9 +15,7 @@ import com.softserve.sprint13.service.SprintService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.softserve.sprint13.service.UserService;
 import com.softserve.sprint13.service.UserServiceImpl;
@@ -72,5 +70,30 @@ public class UserServiceTest {
         User actual = userRepository.findById(1L).get();
         Assertions.assertEquals(expected, actual);
     }
-
+    @Test
+    public void getAllTest(){
+        User user1 = new User();
+        User user2 = new User();
+        user1.setId(1L);
+        user2.setId(2L);
+        List<User> expected = new ArrayList<>();
+        expected.add(user1);
+        expected.add(user2);
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
+        List<User> actual = userService.getAll();
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void createOrUpdateUserTest() {
+        User expected = new User();
+        expected.setRole(User.Role.TRAINEE);
+        expected.setEmail("newUser@email.com");
+        expected.setFirstName("firstName");
+        expected.setLastName("lastName");
+        expected.setPassword("pass123123");
+        expected.setId(1L);
+        doReturn(expected).when(userRepository).save(any());
+        User actual = userService.createOrUpdateUser(expected);
+        Assertions.assertEquals(expected, actual);
+    }
 }

@@ -30,8 +30,9 @@ public class UserServiceImpl implements UserService {
 
     MarathonRepository marathonRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, MarathonRepository marathonRepository) {
         this.userRepository = userRepository;
+        this.marathonRepository = marathonRepository;
     }
 
     @Override
