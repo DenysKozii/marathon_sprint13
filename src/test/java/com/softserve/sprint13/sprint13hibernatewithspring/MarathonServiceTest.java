@@ -1,6 +1,7 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
 import com.softserve.sprint13.entity.Marathon;
+import com.softserve.sprint13.exception.IncorrectIdException;
 import com.softserve.sprint13.repository.MarathonRepository;
 import com.softserve.sprint13.service.MarathonService;
 import java.util.ArrayList;
@@ -60,9 +61,5 @@ public class MarathonServiceTest {
     doReturn(expected).when(marathonRepository).save(any());
     Marathon actual = marathonService.createOrUpdateMarathon(expected);
     Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void deleteMarathonByIdTest() {
   }
 }
