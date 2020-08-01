@@ -14,9 +14,9 @@
     <name>sprint13-hibernate-with-spring</name>
     <description>Project using Hibernate and Spring</description>
 
-    <!--<properties>-->
-        <!--<java.version>11</java.version>-->
-    <!--</properties>-->
+    <properties>
+        <java.version>11</java.version>
+    </properties>
 
     <dependencies>
         <dependency>

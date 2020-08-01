@@ -2,14 +2,18 @@ package com.softserve.sprint13.sprint13hibernatewithspring;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
+import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.entity.Sprint;
+import com.softserve.sprint13.repository.MarathonRepository;
 import com.softserve.sprint13.repository.SprintRepository;
 import com.softserve.sprint13.service.SprintService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +29,9 @@ public class SprintServiceTest {
 
   @MockBean
   SprintRepository sprintRepository;
+
+  @MockBean
+  MarathonRepository marathonRepository;
 
   @Test
   public void getSprintByIdTest() throws ParseException {
@@ -54,8 +61,5 @@ public class SprintServiceTest {
     doReturn(expected).when(sprintRepository).save(any());
     Sprint actual = sprintService.createOrUpdateSprint(expected);
     Assertions.assertEquals(expected, actual);
-
   }
-
-
 }
