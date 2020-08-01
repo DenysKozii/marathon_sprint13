@@ -42,6 +42,7 @@ public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+
 //    @Before
 //    public void setUp(){
 //        System.out.println("before");
@@ -58,7 +59,6 @@ public class UserServiceTest {
     }
     @Test
     public void getUserByIdTest(){
-        long id = 1;
         User expected = new User();
         expected.setRole(User.Role.TRAINEE);
         expected.setEmail("newUser@email.com");
@@ -66,7 +66,7 @@ public class UserServiceTest {
         expected.setLastName("lastName");
         expected.setPassword("pass123123");
         expected.setId(1L);
-        doReturn(Optional.of(expected)).when(userRepository).findById(id);
+        doReturn(Optional.of(expected)).when(userRepository).findById(1L);
         User actual = userRepository.findById(1L).get();
         Assertions.assertEquals(expected, actual);
     }
@@ -96,4 +96,78 @@ public class UserServiceTest {
         User actual = userService.createOrUpdateUser(expected);
         Assertions.assertEquals(expected, actual);
     }
+
+    @Test
+    public void findByRoleTest(){
+        User user1 = new User();
+        User user2 = new User();
+        User user3 = new User();
+        user1.setId(1L);
+        user1.setRole(User.Role.TRAINEE);
+        user2.setId(2L);
+        user2.setRole(User.Role.TRAINEE);
+        user3.setId(3L);
+        user3.setRole(User.Role.MENTOR);
+        List<User> expected1 = new ArrayList<>();
+        expected1.add(user1);
+        expected1.add(user2);
+        List<User> expected2 = new ArrayList<>();
+        expected2.add(user3);
+
+        when(userRepository.findByRole(User.Role.TRAINEE)).thenReturn(Arrays.asList(user1, user2));
+        when(userRepository.findByRole(User.Role.MENTOR)).thenReturn(Collections.singletonList(user3));
+        List<User> actual1 = userService.findByRole(User.Role.TRAINEE);
+        List<User> actual2 = userService.findByRole(User.Role.MENTOR);
+        Assertions.assertEquals(expected1, actual1);
+        Assertions.assertEquals(expected2, actual2);
+    }
+
+
+    @Test
+    public void studentsFromMarathonTest(){
+        User user1 = new User();
+        User user2 = new User();
+        User user3 = new User();
+        user1.setId(1L);
+        user1.setRole(User.Role.TRAINEE);
+        user2.setId(2L);
+        user2.setRole(User.Role.TRAINEE);
+        user3.setId(3L);
+        user3.setRole(User.Role.MENTOR);
+        List<User> students = new ArrayList<>();
+        students.add(user1);
+        students.add(user2);
+        Marathon marathon = new Marathon();
+        marathon.setUsers(students);
+        marathon.setId(1L);
+
+//        doReturn(students).when(userRepository).findByRole(User.Role.TRAINEE);
+        when(userRepository.findByRole(User.Role.TRAINEE)).thenReturn(students);
+        List<User> actual1 = userService.studentsFromMarathon(1L);
+        Assertions.assertEquals(students, actual1);
+    }
+
+    @Test
+    public void deleteTest(){
+        User user1 = new User();
+        user1.setId(100L);
+        user1.setRole(User.Role.TRAINEE);
+        User actual1 = userService.deleteUser(user1);
+        Assertions.assertEquals(user1, actual1);
+    }
+//    @Test
+//    public void addUserToMarathonTest() {
+//        User user = new User();
+//        user.setRole(User.Role.TRAINEE);
+//        user.setEmail("newUser@email.com");
+//        user.setFirstName("firstName");
+//        user.setLastName("lastName");
+//        user.setPassword("pass123123");
+//        user.setId(1L);
+//        Marathon marathon = new Marathon();
+//        marathon.setId(1L);
+////        marathon.setUsers(Arrays.asList(user));
+//
+//        Assertions.assertTrue(userService.addUserToMarathon(user,marathon));
+//    }
 }

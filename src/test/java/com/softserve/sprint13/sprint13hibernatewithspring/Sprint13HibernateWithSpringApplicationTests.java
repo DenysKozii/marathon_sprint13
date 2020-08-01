@@ -54,8 +54,8 @@ class Sprint13HibernateWithSpringApplicationTests {
     @Test
     @Order(1)
     public void checkGetAllUsersByRole() {
-        List<User> actualMentors = userService.getAllByRole(User.Role.MENTOR.toString());
-        List<User> actualTrainees = userService.getAllByRole(User.Role.TRAINEE.toString());
+        List<User> actualMentors = userService.findByRole(User.Role.MENTOR);
+        List<User> actualTrainees = userService.findByRole(User.Role.TRAINEE);
 
         actualMentors.sort(Comparator.comparing(User::getId));
         actualTrainees.sort(Comparator.comparing(User::getId));

@@ -27,12 +27,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     ProgressRepository progressRepository;
 
-
+    @Autowired
     MarathonRepository marathonRepository;
 
-    public UserServiceImpl(UserRepository userRepository, MarathonRepository marathonRepository) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.marathonRepository = marathonRepository;
     }
 
     @Override
@@ -84,20 +84,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User deleteUser(User user) {
         Long id = user.getId();
+        System.out.println(id);
         if (id != null) {
+            System.out.println(userRepository);
             userRepository.deleteById(id);
             return user;
         }
         return null;
-    }
-
-    @Override
-    public List<User> getAllByRole(String role) {
-        List<User> users = userRepository.findAll()
-                .stream()
-                .filter(user -> user.getRole().toString().equals(role))
-                .collect(Collectors.toList());
-        return users.isEmpty() ? new ArrayList<>() : users;
     }
 
     @Override
@@ -118,14 +111,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> studentsFromMarathon(Long marathon_id) {
-        List<User> users = getAllByRole("TRAINEE");
+        List<User> users = findByRole(User.Role.TRAINEE);
+        System.out.println(users);
         Marathon marathon = marathonRepository.getOne(marathon_id);
         return users.isEmpty() ? new ArrayList<>() : users.stream().filter(o->o.getMarathons().contains(marathon)).collect(Collectors.toList());
     }
 
     @Override
     public List<User> studentsNotFromMarathon(Long marathon_id) {
-        List<User> users = getAllByRole("TRAINEE");
+        List<User> users =  findByRole(User.Role.TRAINEE);
         Marathon marathon = marathonRepository.getOne(marathon_id);
         return users.isEmpty() ? new ArrayList<>() : users.stream().filter(o->!o.getMarathons().contains(marathon)).collect(Collectors.toList());
     }

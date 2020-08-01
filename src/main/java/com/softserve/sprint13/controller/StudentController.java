@@ -28,7 +28,7 @@ public class StudentController {
 
     @GetMapping({ "/students"})
     public String getAllStudents(Model model) {
-        List<User> students = userService.getAllByRole("TRAINEE");
+        List<User> students = userService.findByRole(User.Role.TRAINEE);
         model.addAttribute("students", students);
         model.addAttribute("add", false);
         return "students";
@@ -118,7 +118,7 @@ public class StudentController {
         User student = userService.getUserById(student_id);
         Marathon marathon = marathonService.getMarathonById(marathon_id);
         userService.addUserToMarathon(student, marathon);
-        List<User> students = userService.getAllByRole("TRAINEE");
+        List<User> students = userService.findByRole(User.Role.TRAINEE);
         model.addAttribute("add", false);
         model.addAttribute("students",students);
         return "redirect:/students/{student_id}/addMarathon";
