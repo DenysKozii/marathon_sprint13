@@ -62,12 +62,15 @@ public class MarathonTest {
         .andExpect(MockMvcResultMatchers.model().attributeExists("marathon"))
         .andExpect(MockMvcResultMatchers.model().attribute("marathon", expected));
   }
-//
-//
+
 //  @Test
 //  public void deleteMarathonsTest() throws Exception {
-//    mockMvc.perform(MockMvcRequestBuilders.get("/marathons/delete/1"))
-//        .andExpect(MockMvcResultMatchers.status().isOk());
+//    Marathon expected = new Marathon();
+//    expected.setTitle("newMarathon");
+//    expected.setId(1L);
+//    marathonService.createOrUpdateMarathon(expected);
+//    mockMvc.perform(MockMvcRequestBuilders.get("/marathons/delete/"))
+//        .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 //  }
 
 
