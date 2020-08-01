@@ -123,24 +123,24 @@ public class StudentController {
     @GetMapping("/students/{student_id}/addMarathon")
     public String findMarathonForAdd(@PathVariable("student_id") Long student_id, Model model) {
         logger.info("findMarathonForAdd");
-        User student = userService.getUserById(student_id);
+        System.out.println("findMarathonForAdd");
         List<Marathon> marathons = userService.marathonsWithoutStudent(student_id);
         model.addAttribute("marathons", marathons);
         logger.info("marathons " + marathons);
         model.addAttribute("add", true);
-        //{marathon_id}
         return "marathons";
     }
     @GetMapping("/students/{student_id}/addMarathon/{marathon_id}")
-    public String addMarathon(@PathVariable("marathon_id") Long marathon_id,
-                              @PathVariable("student_id") Long student_id, Model model) {
+    public String addMarathon(@PathVariable("marathon_id") Long marathon_id, @PathVariable("student_id") Long student_id, Model model) {
         logger.info("addMarathon");
+        System.out.println("addMarathon");
+
         User student = userService.getUserById(student_id);
         Marathon marathon = marathonService.getMarathonById(marathon_id);
         userService.addUserToMarathon(student, marathon);
         List<User> students = userService.findByRole(User.Role.TRAINEE);
-        model.addAttribute("add", false);
         model.addAttribute("students",students);
+        model.addAttribute("add", false);
         logger.info("students " + students);
         return "redirect:/students/{student_id}/addMarathon";
     }

@@ -4,22 +4,14 @@ import com.softserve.sprint13.entity.Progress;
 import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.repository.ProgressRepository;
-import com.softserve.sprint13.service.TaskService;
-import com.softserve.sprint13.service.TaskServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @DataJpaTest
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})

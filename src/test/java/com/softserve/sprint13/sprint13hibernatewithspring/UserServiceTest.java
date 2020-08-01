@@ -1,64 +1,43 @@
 package com.softserve.sprint13.sprint13hibernatewithspring;
 
+import com.softserve.sprint13.entity.Marathon;
+import com.softserve.sprint13.entity.User;
+import com.softserve.sprint13.exception.IncorrectIdException;
+import com.softserve.sprint13.repository.MarathonRepository;
+import com.softserve.sprint13.repository.UserRepository;
+import com.softserve.sprint13.service.UserService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-import com.softserve.sprint13.entity.Marathon;
-import com.softserve.sprint13.entity.Sprint;
-import com.softserve.sprint13.entity.User;
-import com.softserve.sprint13.exception.IncorrectIdException;
-import com.softserve.sprint13.repository.MarathonRepository;
-import com.softserve.sprint13.repository.SprintRepository;
-import com.softserve.sprint13.repository.UserRepository;
-import com.softserve.sprint13.service.SprintService;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
-
-import com.softserve.sprint13.service.UserService;
-import com.softserve.sprint13.service.UserServiceImpl;
-import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
-import org.springframework.test.context.TestExecutionListeners;
-
-import javax.persistence.EntityNotFoundException;
-
 @SpringBootTest
-//@RunWith(MockitoJUnitRunner.class)
-//@TestExecutionListeners(MockitoTestExecutionListener.class)
 public class UserServiceTest {
     @Autowired
     private UserService userService;
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private MarathonRepository marathonRepository;
 
 
-//    @Before
-//    public void setUp(){
-//        System.out.println("before");
-//        userRepository = Mockito.mock(UserRepository.class);
-//        System.out.println(userRepository);
-//        userService = new UserServiceImpl(userRepository);
-//    }
     @Test
-    public void getUserByIdNullTest(){
+    public void getUserByIdNullTest() {
         long id = 1;
         System.out.println(userRepository);
         doReturn(Optional.empty()).when(userRepository).findById(id);
-        Assertions.assertThrows(IncorrectIdException.class,()->userService.getUserById(id));
+        Assertions.assertThrows(IncorrectIdException.class, () -> userService.getUserById(id));
     }
+
     @Test
-    public void getUserByIdTest(){
+    public void getUserByIdTest() {
         User expected = new User();
         expected.setRole(User.Role.TRAINEE);
         expected.setEmail("newUser@email.com");
@@ -70,8 +49,9 @@ public class UserServiceTest {
         User actual = userRepository.findById(1L).get();
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
-    public void getAllTest(){
+    public void getAllTest() {
         User user1 = new User();
         User user2 = new User();
         user1.setId(1L);
@@ -83,6 +63,7 @@ public class UserServiceTest {
         List<User> actual = userService.getAll();
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
     public void createOrUpdateUserTest() {
         User expected = new User();
@@ -98,7 +79,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findByRoleTest(){
+    public void findByRoleTest() {
         User user1 = new User();
         User user2 = new User();
         User user3 = new User();
@@ -124,7 +105,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void studentsFromMarathonTest(){
+    public void studentsFromMarathonTest() {
         User user1 = new User();
         User user2 = new User();
         User user3 = new User();
@@ -142,34 +123,37 @@ public class UserServiceTest {
         marathon.setId(1L);
         user1.setMarathons(Arrays.asList(marathon));
         user2.setMarathons(Arrays.asList(marathon));
-
-//        doReturn(students).when(userRepository).findByRole(User.Role.TRAINEE);
         when(userRepository.findByRole(User.Role.TRAINEE)).thenReturn(students);
+        when(marathonRepository.getOne(1L)).thenReturn(marathon);
         List<User> actual1 = userService.studentsFromMarathon(1L);
         Assertions.assertEquals(students, actual1);
     }
 
     @Test
-    public void deleteTest(){
+    public void deleteTest() {
         User user1 = new User();
         user1.setId(100L);
         user1.setRole(User.Role.TRAINEE);
         User actual1 = userService.deleteUser(user1);
         Assertions.assertEquals(user1, actual1);
     }
-//    @Test
-//    public void addUserToMarathonTest() {
-//        User user = new User();
-//        user.setRole(User.Role.TRAINEE);
-//        user.setEmail("newUser@email.com");
-//        user.setFirstName("firstName");
-//        user.setLastName("lastName");
-//        user.setPassword("pass123123");
-//        user.setId(1L);
-//        Marathon marathon = new Marathon();
-//        marathon.setId(1L);
-////        marathon.setUsers(Arrays.asList(user));
-//
-//        Assertions.assertTrue(userService.addUserToMarathon(user,marathon));
-//    }
+
+    @Test
+    public void addUserToMarathonTest() {
+        User user = new User();
+        user.setRole(User.Role.TRAINEE);
+        user.setEmail("newUser@email.com");
+        user.setFirstName("firstName");
+        user.setLastName("lastName");
+        user.setPassword("pass123123");
+        user.setId(1L);
+        Marathon marathon = new Marathon();
+        marathon.setId(1L);
+        marathon.setUsers(new ArrayList<>());
+        when(marathonRepository.getOne(1L)).thenReturn(marathon);
+        when(userRepository.getOne(1L)).thenReturn(user);
+        doReturn(marathon).when(marathonRepository).save(any());
+        Assertions.assertTrue(userService.addUserToMarathon(user, marathon));
+        Assertions.assertEquals(Arrays.asList(user), marathon.getUsers());
+    }
 }

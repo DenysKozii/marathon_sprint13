@@ -6,7 +6,6 @@ import com.softserve.sprint13.entity.Sprint;
 import com.softserve.sprint13.entity.Task;
 import com.softserve.sprint13.entity.User;
 import com.softserve.sprint13.service.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,15 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.ConstraintViolationException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -165,18 +159,31 @@ public class StudentTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("user"))
                 .andExpect(MockMvcResultMatchers.model().attribute("user", expected));
     }
+    @Test
+    public void findStudentForAddTest() throws Exception {
+        List<User> expected = userService.studentsNotFromMarathon(1L);
+        mockMvc.perform(MockMvcRequestBuilders.get("/students/1/add"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("students"))
+                .andExpect(MockMvcResultMatchers.model().attribute("students", expected))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("add"))
+                .andExpect(MockMvcResultMatchers.model().attribute("add", true));
+    }
+
+
+
 
     @Test
     public void addMarathonTest() throws Exception {
         User student = userService.getUserById(1L);
         Marathon marathon = marathonService.getMarathonById(1L);
         userService.addUserToMarathon(student, marathon);
-        List<User> expected = userService.findByRole(User.Role.TRAINEE);
-        mockMvc.perform(MockMvcRequestBuilders.get("/students/1/addMarathon/1"))
-//                .andExpect(MockMvcResultMatchers.model().attributeExists("students"))
-                .andExpect(MockMvcResultMatchers.model().attribute("students", expected))
+        List<Marathon> marathons = userService.marathonsWithoutStudent(1L);
+        mockMvc.perform(MockMvcRequestBuilders.get("/students/1/addMarathon"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("marathons"))
+                .andExpect(MockMvcResultMatchers.model().attribute("marathons", marathons))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("add"))
-                .andExpect(MockMvcResultMatchers.model().attribute("add", false))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+                .andExpect(MockMvcResultMatchers.model().attribute("add", true))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

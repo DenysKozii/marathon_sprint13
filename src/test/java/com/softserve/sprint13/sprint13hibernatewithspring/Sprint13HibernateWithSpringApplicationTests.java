@@ -54,7 +54,7 @@ class Sprint13HibernateWithSpringApplicationTests {
             marathon.setTitle("Marathon1");
             marathonService.createOrUpdateMarathon(marathon);
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 2; i++) {
                 User mentor = new User();
                 mentor.setEmail("mentoruser" + i + "@dh.com");
                 mentor.setFirstName("MentorName" + i);
@@ -145,7 +145,7 @@ class Sprint13HibernateWithSpringApplicationTests {
     @Test
     @Order(1)
     public void checkAllProgressByUserIdAndMarathonId() {
-        List<Long> expected = Arrays.asList(1L, 3L, 5L, 7L);
+        List<Long> expected = Arrays.asList(1L, 3L, 5L, 7L,9L,11L,13L, 15L,17L);
         List<Long> actual = progressService.allProgressByUserIdAndMarathonId(2L, 1L).stream()
                 .map(Progress::getId).collect(Collectors.toList());
         assertEquals(expected, actual, "checkAllProgressByUserIdAndMarathonId()");
@@ -154,7 +154,7 @@ class Sprint13HibernateWithSpringApplicationTests {
     @Test
     @Order(1)
     public void checkAllProgressByUserIdAndSprintId() {
-        List<Long> expected = Arrays.asList(1L, 3L);
+        List<Long> expected = Arrays.asList(1L, 3L, 5L);
         List<Long> actual = progressService.allProgressByUserIdAndSprintId(2L, 1L).stream()
                 .map(Progress::getId).collect(Collectors.toList());
         assertEquals(expected, actual, "checkAllProgressByUserIdAndSprintId()");
