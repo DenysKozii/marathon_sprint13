@@ -3,6 +3,8 @@ package com.softserve.sprint13.controller;
 
 import com.softserve.sprint13.entity.Marathon;
 import com.softserve.sprint13.service.MarathonService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,44 +18,51 @@ import java.util.List;
 @Controller
 public class MarathonController {
 
-    @Autowired
-    private MarathonService marathonService;
+  Logger logger = LoggerFactory.getLogger(MarathonController.class);
 
-    @GetMapping({"/", "/marathons"})
-    public String getAllMarathons(Model model) {
-        List<Marathon> marathons = marathonService.getAll();
-        model.addAttribute("marathons", marathons);
-        model.addAttribute("add", false);
-        return "marathons";
-    }
+  @Autowired
+  private MarathonService marathonService;
 
-    @GetMapping("/marathons/edit/{id}")
-    public String editMarathonForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("marathon", marathonService.getMarathonById(id));
-        return "edit";
-    }
+  @GetMapping({"/", "/marathons"})
+  public String getAllMarathons(Model model) {
+    logger.info("get all marathons");
+    List<Marathon> marathons = marathonService.getAll();
+    model.addAttribute("marathons", marathons);
+    model.addAttribute("add", false);
+    return "marathons";
+  }
 
-    @GetMapping("/marathons/create")
-    public String createMarathonForm(Model model) {
-        return "create";
-    }
+  @GetMapping("/marathons/edit/{id}")
+  public String editMarathonForm(@PathVariable("id") Long id, Model model) {
+    logger.info("edit marathon form");
+    model.addAttribute("marathon", marathonService.getMarathonById(id));
+    return "edit";
+  }
 
-    @PostMapping("/marathons/edit")
-    public String editMarathon(@ModelAttribute("marathon") Marathon marathon) {
-        marathonService.createOrUpdateMarathon(marathon);
-        return "redirect:/marathons";
-    }
+  @GetMapping("/marathons/create")
+  public String createMarathonForm(Model model) {
+    return "create";
+  }
+
+  @PostMapping("/marathons/edit")
+  public String editMarathon(@ModelAttribute("marathon") Marathon marathon) {
+    logger.info("edit marathon");
+    marathonService.createOrUpdateMarathon(marathon);
+    return "redirect:/marathons";
+  }
 
 
-    @PostMapping("/marathons/create")
-    public String createMarathons(@ModelAttribute("marathon") Marathon marathon) {
-        marathonService.createOrUpdateMarathon(marathon);
-        return "redirect:/marathons";
-    }
+  @PostMapping("/marathons/create")
+  public String createMarathons(@ModelAttribute("marathon") Marathon marathon) {
+    logger.info("creat marathon");
+    marathonService.createOrUpdateMarathon(marathon);
+    return "redirect:/marathons";
+  }
 
-    @GetMapping("/marathons/delete/{id}")
-    public String deleteMarathons(@PathVariable("id") Long id) {
-        marathonService.deleteMarathonById(id);
-        return "redirect:/marathons";
-    }
+  @GetMapping("/marathons/delete/{id}")
+  public String deleteMarathons(@PathVariable("id") Long id) {
+    logger.info("delete marathon");
+    marathonService.deleteMarathonById(id);
+    return "redirect:/marathons";
+  }
 }
