@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -41,9 +40,35 @@ public class MarathonTest {
   @Test
   public void createMarathonTest() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.post("/marathons/create")
-        .param("title","newMarathon"))
+        .param("title", "newMarathon"))
         .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
   }
+
+  @Test
+  public void editMarathonTest() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/marathons/edit")
+        .param("title", "newMarathon2"))
+        .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+  }
+
+  @Test
+  public void editMarathonFormTest() throws Exception {
+    Marathon expected = new Marathon();
+    expected.setTitle("newMarathon3");
+    expected.setId(1L);
+    marathonService.createOrUpdateMarathon(expected);
+    mockMvc.perform(MockMvcRequestBuilders.get("/marathons/edit/1"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.model().attributeExists("marathon"))
+        .andExpect(MockMvcResultMatchers.model().attribute("marathon", expected));
+  }
+//
+//
+//  @Test
+//  public void deleteMarathonsTest() throws Exception {
+//    mockMvc.perform(MockMvcRequestBuilders.get("/marathons/delete/1"))
+//        .andExpect(MockMvcResultMatchers.status().isOk());
+//  }
 
 
 }
